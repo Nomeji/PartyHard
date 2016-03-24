@@ -1,0 +1,2 @@
+# PartyHard
+Android event sharing
