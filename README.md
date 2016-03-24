@@ -1,9 +1,9 @@
 # PartyHard
 Android event sharing
 
-Projet Android INF257
+---
 
-Corentin BOUCHAUDON, Arnaud DUC NGUYEN, Amaury PUNEL, Aurélien TERRAIN
+**Corentin BOUCHAUDON, Arnaud DUC NGUYEN, Amaury PUNEL, Aurélien TERRAIN**
 
 ## Présentation de l’application
 L’application permet la recherche, création et partage événements entre utilisateurs.
@@ -46,3 +46,5 @@ Si possible :
 * S’abonner à un organisateur pour être au courant de ses nouveaux/prochains évènements
 
 ## Croquis de l’application
+![croquis1](https://github.com/Nomeji/PartyHard/blob/master/img/croquis1.png)
+![croquis2](https://github.com/Nomeji/PartyHard/blob/master/img/croquis2.png)
