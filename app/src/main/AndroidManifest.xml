@@ -24,6 +24,7 @@
             android:name=".VueOptions"
             android:label="@string/title_activity_vue_options" />
         <activity android:name=".CreerSoiree" />
+        <activity android:name=".RechercherSoiree"></activity>
     </application>
 
 </manifest>
