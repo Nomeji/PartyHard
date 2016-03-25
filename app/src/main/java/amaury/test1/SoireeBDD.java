@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,8 @@ public class SoireeBDD {
     private static final String KEY_COORD="coordonnees";
     private static final String KEY_ORGA="organisateur";
 
+    private static final String[] COLUMNS = {KEY_ID,KEY_TITLE,KEY_DESC,KEY_PRIX,KEY_CURR,KEY_DATE,KEY_HEURE,KEY_COORD,KEY_ORGA};
+
     //Database Version
     private static final int DATABASE_VERSION = 1;
 
@@ -40,7 +43,7 @@ public class SoireeBDD {
 
     public SoireeBDD(Context context){
         //On crée la BDD et sa table
-        mySQLiteHelper = new MySQLiteHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
+       // mySQLiteHelper = new MySQLiteHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     public void open(){
@@ -57,8 +60,12 @@ public class SoireeBDD {
         return bdd;
     }
 
+    //Ajoute une soirée à la BDD
     public void addSoiree(Soiree soiree){
-       // SQLiteDatabase db = this.getWritableDatabase();
+        //for logging
+        Log.d("addSoiree", soiree.toString());
+
+        // SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         //values.put(KEY_ID,soiree.getId());
@@ -76,6 +83,7 @@ public class SoireeBDD {
         //db.close();
     }
 
+    //Obtenir une soiree grace a son ID
     public Soiree getSoiree(int id){
         //SQLiteDatabase db = this.getReadableDatabase();
 
@@ -99,6 +107,7 @@ public class SoireeBDD {
         return soiree;
     }
 
+    //Obtenir toutes les soirées
     public List<Soiree> getAllSoirees(){
         List<Soiree> soirees = new LinkedList<>();
 
@@ -128,6 +137,7 @@ public class SoireeBDD {
         return soirees;
     }
 
+    //Supprimer une soirée
     public void deleteSoiree(Soiree soiree){
         //SQLiteDatabase db = this.getWritableDatabase();
 

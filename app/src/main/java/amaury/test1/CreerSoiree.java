@@ -31,7 +31,7 @@ public class CreerSoiree extends AppCompatActivity {
 
         int orga = 1;
 
-        SoireeBDD bdd = new SoireeBDD(this);
+        MySQLiteHelper bdd = new MySQLiteHelper(this);
         Soiree soiree = new Soiree(0,titre,desc,prix,curr,date,heure,coor,orga);
         bdd.addSoiree(soiree);
         bdd.close();
