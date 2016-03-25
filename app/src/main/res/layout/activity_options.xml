@@ -55,8 +55,17 @@
         android:layout_height="wrap_content"
         android:text="Créer Test"
         android:id="@+id/button5"
+        android:onClick="onClickAjouterEvent"
+        android:layout_below="@+id/scrollViewTest"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RemplirTest"
+        android:id="@+id/boutonRemplirtest"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2"
-        android:onClick="onClickAjouterEvent"/>
+        android:layout_toRightOf="@+id/button5"
+        android:layout_toEndOf="@+id/button5"
+        android:onClick="remplirSoiree"/>
 </RelativeLayout>

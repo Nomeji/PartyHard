@@ -46,11 +46,11 @@ public class VueOptions extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
-        remplirSoiree();
+        MySQLiteHelper bdd = new MySQLiteHelper(this);
     }
 
-    public void remplirSoiree(){
-        SoireeBDD bdd = new SoireeBDD(this);
+    public void remplirSoiree(View view){
+        MySQLiteHelper bdd = new MySQLiteHelper(this);
         List<Soiree> liste = bdd.getAllSoirees();
         for (Soiree s:liste
              ) {

@@ -164,4 +164,9 @@ public class Soiree {
     public void setOrganisateur(int organisateur) {
         this.organisateur = organisateur;
     }
+
+    @Override
+    public String toString(){
+        return "titre : "+titre+"; description : "+description+"; prix : "+prix+" "+currency+"; date : "+date+"; heure : "+heure+"; coordonnees : "+coordonnees+"; organisateur : "+organisateur;
+    }
 }

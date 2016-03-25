@@ -97,6 +97,8 @@
             <Spinner
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
+                android:entries="@array/currency_arrays"
+                android:prompt="@string/currency_prompt"
                 android:id="@+id/champCurrency" />
         </LinearLayout>
 

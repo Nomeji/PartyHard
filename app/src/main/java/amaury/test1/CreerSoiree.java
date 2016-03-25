@@ -17,9 +17,9 @@ public class CreerSoiree extends AppCompatActivity {
         String desc = champDesc.getText().toString();
         EditText champPrix = (EditText) findViewById(R.id.champPrix);
         Double prix = Double.parseDouble(champPrix.getText().toString());
-        //Spinner champCurr = (Spinner) findViewById(R.id.champCurrency);
-        //String curr = champCurr.toString();
-        String curr = "€";
+        Spinner champCurr = (Spinner) findViewById(R.id.champCurrency);
+        String curr = String.valueOf(champCurr.getSelectedItem());
+        //String curr = "€";
         EditText champDate = (EditText) findViewById(R.id.champDate);
         String date = champDate.getText().toString();
         EditText champHeure = (EditText) findViewById(R.id.champHeure);
@@ -31,7 +31,7 @@ public class CreerSoiree extends AppCompatActivity {
 
         int orga = 1;
 
-        SoireeBDD bdd = new SoireeBDD(this);
+        MySQLiteHelper bdd = new MySQLiteHelper(this);
         Soiree soiree = new Soiree(0,titre,desc,prix,curr,date,heure,coor,orga);
         bdd.addSoiree(soiree);
         bdd.close();
