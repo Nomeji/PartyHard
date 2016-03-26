@@ -68,13 +68,6 @@ public class Soiree {
         TextView tvCoordonnees = new TextView(context);
         tvCoordonnees.setText(this.coordonnees);
 
-       /* temp.addView(tvTitre);
-        //temp.addView(tvDesc);
-        temp.addView(tvPrix);
-       // temp.addView(tvDate);
-       // temp.addView(tvHeure);
-        temp.addView(tvDateHeure);
-        temp.addView(tvCoordonnees);*/
 
         LinearLayout ll1 = new LinearLayout(context);
         ll1.setOrientation(LinearLayout.HORIZONTAL);
@@ -87,8 +80,17 @@ public class Soiree {
         ll2.addView(tvDateHeure);
         ll2.addView(tvCoordonnees);
 
+        TextView tvOrga = new TextView(context);
+        String orgaT = "ID de l'organisateur : "+this.organisateur;
+        tvOrga.setText(orgaT);
+
+        LinearLayout ll3 = new LinearLayout(context);
+        ll3.setOrientation(LinearLayout.HORIZONTAL);
+        ll3.addView(tvOrga);
+
         temp.addView(ll1);
         temp.addView(ll2);
+        temp.addView(ll3);
         return temp;
     }
 

@@ -46,17 +46,21 @@ public class VueOptions extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_options);
-        MySQLiteHelper bdd = new MySQLiteHelper(this);
+        //MySQLiteHelper bdd = new MySQLiteHelper(this);
+        //bdd.close();
     }
 
     public void remplirSoiree(View view){
+        //On récupère la BDD
         MySQLiteHelper bdd = new MySQLiteHelper(this);
         List<Soiree> liste = bdd.getAllSoirees();
         for (Soiree s:liste
              ) {
+            //L'affichage est encapsulé dans un LinearLayout pour chaque évènement
             LinearLayout tmpL = s.toSelectionLayout(this);
             tmpL.setBackgroundColor(getResources().getColor(R.color.blanc));
             tmpL.setClickable(true);
+            //Teste juste le clique sur un évènement
             tmpL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -66,6 +70,7 @@ public class VueOptions extends Activity {
             LinearLayout ll = (LinearLayout) findViewById(R.id.contenuEvent);
             ll.addView(tmpL);
         }
+        bdd.close();
     }
 
 

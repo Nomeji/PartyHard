@@ -31,6 +31,12 @@ public class Accueil extends AppCompatActivity {
         startActivity(da);
     }
 
+    public void onClickLogin(View view){
+        Intent da = new Intent();
+        da.setClass(this, LoginActivity.class);
+        startActivity(da);
+    }
+
     public void onClickRecherche(View view){
         Intent da = new Intent();
         da.setClass(this, RechercherSoiree.class);
