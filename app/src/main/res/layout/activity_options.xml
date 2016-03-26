@@ -25,47 +25,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollViewTest"
-        android:layout_gravity="center_horizontal"
-        android:fillViewport="true"
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
         android:layout_below="@+id/textView2"
-        android:layout_above="@+id/button4">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/button4"
-            android:layout_below="@+id/textView2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/contenuEvent"
-            android:background="@color/colorPrimary">
-
-        </LinearLayout>
-    </ScrollView>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Créer Test"
-        android:id="@+id/button5"
-        android:onClick="onClickAjouterEvent"
-        android:layout_below="@+id/scrollViewTest"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="RemplirTest"
-        android:id="@+id/boutonRemplirtest"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/button5"
-        android:layout_toEndOf="@+id/button5"
-        android:onClick="remplirSoiree"/>
+        android:layout_above="@+id/button4" />
 </RelativeLayout>
