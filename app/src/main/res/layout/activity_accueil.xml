@@ -52,6 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Options"
+        android:onClick="onClickOptions"
         android:id="@+id/button6"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
