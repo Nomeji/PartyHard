@@ -613,15 +613,32 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
         db.execSQL(createSoiree);
+        String createCompo = "INSERT INTO compotype VALUES (1, 1);";
+        db.execSQL(createSoiree);
+
         createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
         db.execSQL(createSoiree);
+        createCompo = "INSERT INTO compotype VALUES (1, 2);";
+        db.execSQL(createSoiree);
+
         createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
         db.execSQL(createSoiree);
+        createCompo = "INSERT INTO compotype VALUES (1, 2);";
+        db.execSQL(createSoiree);
+
         createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
         db.execSQL(createSoiree);
+        createCompo = "INSERT INTO compotype VALUES (2, 3);";
+        db.execSQL(createSoiree);
+
         createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
         db.execSQL(createSoiree);
+        createCompo = "INSERT INTO compotype VALUES (2, 4);";
+        db.execSQL(createSoiree);
+
         createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        db.execSQL(createSoiree);
+        createCompo = "INSERT INTO compotype VALUES (3, 5);";
         db.execSQL(createSoiree);
 
         String createType = "INSERT INTO type VALUES (1, 'soiree');";
