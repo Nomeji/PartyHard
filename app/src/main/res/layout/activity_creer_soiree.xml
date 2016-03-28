@@ -218,10 +218,10 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.05"
         android:onClick="onClickajouterSoiree"
+        android:layout_marginRight="53dp"
+        android:layout_marginEnd="53dp"
         android:layout_above="@+id/linearLayout2"
         android:layout_alignRight="@+id/linearLayout2"
-        android:layout_alignEnd="@+id/linearLayout2"
-        android:layout_marginRight="30dp"
-        android:layout_marginEnd="30dp" />
+        android:layout_alignEnd="@+id/linearLayout2" />
 
 </RelativeLayout>
