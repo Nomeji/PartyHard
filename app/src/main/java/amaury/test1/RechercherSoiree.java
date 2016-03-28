@@ -37,7 +37,7 @@ public class RechercherSoiree extends AppCompatActivity {
         int i = 0;
         ArrayList<String> soireesResult = new ArrayList<>();
 
-        ArrayList<String> queryResult = new ArrayList<>();
+        ArrayList<Soiree> queryResult = new ArrayList<>();
 
         if (findViewById(R.id.optSoiree).onCheckIsTextEditor()) {
             String soiree = "soiree";

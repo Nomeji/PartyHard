@@ -19,32 +19,37 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     //Column Names
     //Soiree
-    private static final String KEY_ID="id";
-    private static final String KEY_TITLE="titre";
-    private static final String KEY_DESC="description";
-    private static final String KEY_PRIX="prix";
-    private static final String KEY_CURR="currency";
-    private static final String KEY_DATE="date";
-    private static final String KEY_HEURE="heure";
-    private static final String KEY_COORD="coordonnees";
-    private static final String KEY_ORGA="organisateur";
+    private static final String KEY_ID = "id";
+    private static final String KEY_TITLE = "titre";
+    private static final String KEY_DESC = "description";
+    private static final String KEY_PRIX = "prix";
+    private static final String KEY_CURR = "currency";
+    private static final String KEY_DATE = "date";
+    private static final String KEY_HEURE = "heure";
+    private static final String KEY_COORD = "coordonnees";
+    private static final String KEY_ORGA = "organisateur";
     //Utilisateurs
-    private static final String KEY_LOGIN="login";
-    private static final String KEY_PSWRD="password";
-    private static final String KEY_EMAIL="email";
-    private static final String KEY_NOM="nom";
-    private static final String KEY_PRENOM="prenom";
+    private static final String KEY_LOGIN = "login";
+    private static final String KEY_PSWRD = "password";
+    private static final String KEY_EMAIL = "email";
+    private static final String KEY_NOM = "nom";
+    private static final String KEY_PRENOM = "prenom";
     //EvenementsSuivies
-    private static final String KEY_IDUSER="iduser";
-    private static final String KEY_IDEVENT="idevent";
+    private static final String KEY_IDUSER = "iduser";
+    private static final String KEY_IDEVENT = "idevent";
     //UtilisateursSuivis
-    private static final String KEY_IDSUIVEUR="idusersuiveur";
-    private static final String KEY_IDSUIVI="idusersuivi";
+    private static final String KEY_IDSUIVEUR = "idusersuiveur";
+    private static final String KEY_IDSUIVI = "idusersuivi";
+    //Type
+    private static final String KEY_IDTYPE = "idutype";
+    private static final String KEY_NOMTYPE = "idnomtype";
+    //CompoType
+    private static final String KEY_IDCOMPOTYPE = "idutype";
+    private static final String KEY_IDSOIREE = "idsoiree";
 
 
-
-    private static final String[] COLUMNS_SOIREE = {KEY_ID,KEY_TITLE,KEY_DESC,KEY_PRIX,KEY_CURR,KEY_DATE,KEY_HEURE,KEY_COORD,KEY_ORGA};
-    private static final String[] COLUMNS_UTILISATEUR = {KEY_ID,KEY_LOGIN,KEY_PSWRD,KEY_EMAIL,KEY_NOM,KEY_PRENOM};
+    private static final String[] COLUMNS_SOIREE = {KEY_ID, KEY_TITLE, KEY_DESC, KEY_PRIX, KEY_CURR, KEY_DATE, KEY_HEURE, KEY_COORD, KEY_ORGA};
+    private static final String[] COLUMNS_UTILISATEUR = {KEY_ID, KEY_LOGIN, KEY_PSWRD, KEY_EMAIL, KEY_NOM, KEY_PRENOM};
 
 
     //Database Version
@@ -59,6 +64,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_MYCREATEDEVENT = "mycreatedevent";
     private static final String TABLE_MYFOLLEWEVENT = "myfollowevent";
     private static final String TABLE_MYFOLLOWUSER = "myfollowuser";
+    private static final String TABLE_COMPOTYPE = "mycompotype";
+    private static final String TABLE_TYPE = "mytype";
 
 
     public MySQLiteHelper(Context context) {
@@ -66,14 +73,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //ADMIN
-    public void deleteBDD(){
+    public void deleteBDD() {
 
         this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS soirees");
         this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS utilisateurs");
 
     }
 
-    public void createBDD(){
+    public void createBDD() {
         //Insérer des valeurs dans la BDD
         String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','user1','user1');";
         this.getWritableDatabase().execSQL(createUser);
@@ -103,7 +110,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     //METHODES POUR LES SOIREES
     //*************************
     //Ajoute une soirée à la BDD
-    public void addSoiree(Soiree soiree){
+    public void addSoiree(Soiree soiree) {
         //for logging
         Log.d("addSoiree", soiree.toString());
 
@@ -130,7 +137,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //Obtenir une soiree grace a son ID
-    public Soiree getSoiree(int id){
+    public Soiree getSoiree(int id) {
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -161,20 +168,20 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //Obtenir toutes les soirées
-    public List<Soiree> getAllSoirees(){
+    public List<Soiree> getAllSoirees() {
         List<Soiree> soirees = new LinkedList<>();
 
         // 1. build the query
-        String query = "SELECT * FROM "+TABLE_SOIREES;
+        String query = "SELECT * FROM " + TABLE_SOIREES;
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query,null);
+        Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build book and add it to list
         Soiree soiree = null;
-        if(cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 soiree = new Soiree();
                 soiree.setId(Integer.parseInt(cursor.getString(0)));
                 soiree.setTitre(cursor.getString(1));
@@ -187,7 +194,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
 
                 soirees.add(soiree);
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         Log.d("getAllSoirees()", soirees.toString());
@@ -197,7 +204,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //Supprimer une soirée
-    public void deleteSoiree(Soiree soiree){
+    public void deleteSoiree(Soiree soiree) {
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -212,11 +219,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //Retourne la liste des soirées créées par un user donnée
-    public List<Soiree> getSoireesOrga(int id){
+    public List<Soiree> getSoireesOrga(int id) {
         List<Soiree> soirees = new LinkedList<>();
 
         // 1. build the query
-        String query = "SELECT * FROM "+TABLE_SOIREES+" WHERE organisateur="+id;
+        String query = "SELECT * FROM " + TABLE_SOIREES + " WHERE organisateur=" + id;
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -224,8 +231,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 3. go over each row, build book and add it to list
         Soiree soiree = null;
-        if(cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 soiree = new Soiree();
                 soiree.setId(Integer.parseInt(cursor.getString(0)));
                 soiree.setTitre(cursor.getString(1));
@@ -238,67 +245,114 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
 
                 soirees.add(soiree);
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
-        Log.d("getSoireesOrga("+id+")", soirees.toString());
+        Log.d("getSoireesOrga(" + id + ")", soirees.toString());
 
         // 4. return soirees
         return soirees;
     }
 
     //Requêtes pour RechercheSoirée
-    public ArrayList<Soiree> getRechercheSoiree(int types, boolean gratuit, ArrayList<String> soirees ){
-        ArrayList<Soiree> soireesResult = new ArrayList<>();
+    public ArrayList<Soiree> getRechercheSoiree(int types, boolean gratuit, ArrayList<String> soirees) {
+        ArrayList<Soiree> soireesListe = new ArrayList<>();
 
+        String signe;
 
-        if ( (types==1) && gratuit ){
-            String query1 = "SELECT * FROM "+TABLE_SOIREES;
+        if (gratuit) {
+            signe = "=";
+        }
+        else {
+            signe = ">=";
         }
 
-        else if(types == 1 && !gratuit){
-            String query2 = "SELECT * FROM "+TABLE_SOIREES;
+        if ((types == 1)) {
+            String query1 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = " + soirees.get(1) + " and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
+            // 2. get reference to writable DB
+            SQLiteDatabase db1 = this.getWritableDatabase();
+            Cursor cursor = db1.rawQuery(query1, null);
+
+            // 3. go over each row, build book and add it to list
+            Soiree soiree = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    soiree = new Soiree();
+                    soiree.setId(Integer.parseInt(cursor.getString(0)));
+                    soiree.setTitre(cursor.getString(1));
+                    soiree.setDescription(cursor.getString(2));
+                    soiree.setPrix(Double.parseDouble(cursor.getString(3)));
+                    soiree.setCurrency(cursor.getString(4));
+                    soiree.setDate(cursor.getString(5));
+                    soiree.setHeure(cursor.getString(6));
+                    soiree.setCoordonnees(cursor.getString(7));
+                    soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
+
+                    soireesListe.add(soiree);
+                } while (cursor.moveToNext());
+
+
+            }
         }
+            else if (types == 2) {
+                String query2 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = " + soirees.get(1) + "and t.nomtype =" + soirees.get(2) + " and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
+                // 2. get reference to writable DB
+                SQLiteDatabase db2 = this.getWritableDatabase();
+                Cursor cursor = db2.rawQuery(query2, null);
 
-        else if(types == 2 && gratuit){
-            String query3 = "SELECT * FROM "+TABLE_SOIREES;
-        }
+                // 3. go over each row, build book and add it to list
+                Soiree soiree = null;
+                if (cursor.moveToFirst()) {
+                    do {
+                        soiree = new Soiree();
+                        soiree.setId(Integer.parseInt(cursor.getString(0)));
+                        soiree.setTitre(cursor.getString(1));
+                        soiree.setDescription(cursor.getString(2));
+                        soiree.setPrix(Double.parseDouble(cursor.getString(3)));
+                        soiree.setCurrency(cursor.getString(4));
+                        soiree.setDate(cursor.getString(5));
+                        soiree.setHeure(cursor.getString(6));
+                        soiree.setCoordonnees(cursor.getString(7));
+                        soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
 
-        else if(types == 2 && !gratuit){
-            String query4 = "SELECT * FROM "+TABLE_SOIREES;
-        }
+                        soireesListe.add(soiree);
+                    } while (cursor.moveToNext());
+                }
 
-        else if(types == 3 && gratuit){
-            String query5 = "SELECT * FROM "+TABLE_SOIREES;
-        }
+            }
+            else if (types == 3) {
+                String query3 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = " + soirees.get(1) + "and t.nomtype =" + soirees.get(2) + " and t.nomtye =" + soirees.get(3) + " and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
+                // 2. get reference to writable DB
+                SQLiteDatabase db3 = this.getWritableDatabase();
+                Cursor cursor = db3.rawQuery(query3, null);
 
-        else if(types == 3 && !gratuit){
-            String query6 = "SELECT * FROM "+TABLE_SOIREES;
-        }
+                // 3. go over each row, build book and add it to list
+                Soiree soiree = null;
+                if (cursor.moveToFirst()) {
+                    do {
+                        soiree = new Soiree();
+                        soiree.setId(Integer.parseInt(cursor.getString(0)));
+                        soiree.setTitre(cursor.getString(1));
+                        soiree.setDescription(cursor.getString(2));
+                        soiree.setPrix(Double.parseDouble(cursor.getString(3)));
+                        soiree.setCurrency(cursor.getString(4));
+                        soiree.setDate(cursor.getString(5));
+                        soiree.setHeure(cursor.getString(6));
+                        soiree.setCoordonnees(cursor.getString(7));
+                        soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
 
-        /* 2. get reference to writable DB
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query,null);
+                        soireesListe.add(soiree);
+                    } while (cursor.moveToNext());
+                }
+            }
 
-        // 3. go over each row, build book and add it to list
-        Soiree soiree = null;
-        if(cursor.moveToFirst()){
-            do{
-                soiree = new Soiree();
-                soiree.setId(Integer.parseInt(cursor.getString(0)));
-                soiree.setTitre(cursor.getString(1));
-                soiree.setDescription(cursor.getString(2));
-                soiree.setPrix(Double.parseDouble(cursor.getString(3)));
-                soiree.setCurrency(cursor.getString(4));
-                soiree.setDate(cursor.getString(5));
-                soiree.setHeure(cursor.getString(6));
-                soiree.setCoordonnees(cursor.getString(7));
-                soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
 
-                soirees.add(soiree);
-            }while(cursor.moveToNext());*/
-        return (soireesResult);
-        }
+            return (soireesListe);
+
+    }
+
+
+
 
     //*************************
     //METHODES POUR LES UTILISATEURS
