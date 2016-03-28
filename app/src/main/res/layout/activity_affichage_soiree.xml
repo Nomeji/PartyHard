@@ -66,10 +66,10 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Organisé par"
         android:id="@+id/tvAffOrgaPar"
-        android:layout_marginBottom="121dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="89dp"
+        android:layout_below="@+id/tvAffDesc"
+        android:layout_alignRight="@+id/tvAffPrix"
+        android:layout_alignEnd="@+id/tvAffPrix" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -141,5 +141,46 @@
         android:layout_above="@+id/tvAffPrixAf"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Partager par SMS"
+        android:id="@+id/buttonPartageSMS"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="onClickPartageSMS"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="S&apos;inscire"
+        android:id="@+id/buttonInscrireSoiree"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/tvAffOrgaPar"
+        android:layout_alignStart="@+id/tvAffOrgaPar"
+        android:onClick="onClickSinscrireEvent"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajouter Calendrier"
+        android:id="@+id/buttonAjouterCalendrier"
+        android:onClick="onClickAjouterCalendrier"
+        android:layout_above="@+id/buttonPartageSMS"
+        android:layout_alignRight="@+id/ivAffImage"
+        android:layout_alignEnd="@+id/ivAffImage" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Voir Fiche Organisateur"
+        android:id="@+id/buttonVoirOrga"
+        android:layout_above="@+id/buttonAjouterCalendrier"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onClickVoirOrga"/>
 
 </RelativeLayout>

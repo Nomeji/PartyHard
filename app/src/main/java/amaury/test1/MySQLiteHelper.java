@@ -33,6 +33,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_EMAIL="email";
     private static final String KEY_NOM="nom";
     private static final String KEY_PRENOM="prenom";
+    //EvenementsSuivies
+    private static final String KEY_IDUSER="iduser";
+    private static final String KEY_IDEVENT="idevent";
+    //UtilisateursSuivis
+    private static final String KEY_IDSUIVEUR="idusersuiveur";
+    private static final String KEY_IDSUIVI="idusersuivi";
+
 
 
     private static final String[] COLUMNS_SOIREE = {KEY_ID,KEY_TITLE,KEY_DESC,KEY_PRIX,KEY_CURR,KEY_DATE,KEY_HEURE,KEY_COORD,KEY_ORGA};
@@ -40,7 +47,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 
     //Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
 
     //Database Name
     private static final String DATABASE_NAME = "soireeDB";
@@ -48,6 +55,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     //Tables Name
     private static final String TABLE_SOIREES = "soirees";
     private static final String TABLE_USERS = "utilisateurs";
+    private static final String TABLE_MYCREATEDEVENT = "mycreatedevent";
+    private static final String TABLE_MYFOLLEWEVENT = "myfollowevent";
+    private static final String TABLE_MYFOLLOWUSER = "myfollowuser";
 
 
     public MySQLiteHelper(Context context) {
@@ -56,6 +66,35 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     //ADMIN
     public void deleteBDD(){
+
+        this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS soirees");
+        this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS utilisateurs");
+
+    }
+
+    public void createBDD(){
+        //Insérer des valeurs dans la BDD
+        String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','user1','user1');";
+        this.getWritableDatabase().execSQL(createUser);
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user2','user2','user2','user2','user2');";
+        this.getWritableDatabase().execSQL(createUser);
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user3','user3','user3','user3','user3');";
+        this.getWritableDatabase().execSQL(createUser);
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user4','user4','user4','user4','user4');";
+        this.getWritableDatabase().execSQL(createUser);
+
+        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        this.getWritableDatabase().execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        this.getWritableDatabase().execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
+        this.getWritableDatabase().execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
+        this.getWritableDatabase().execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        this.getWritableDatabase().execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        this.getWritableDatabase().execSQL(createSoiree);
 
     }
 
@@ -171,6 +210,41 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Log.d("deleteSoiree", soiree.toString());
     }
 
+    //Retourne la liste des soirées créées par un user donnée
+    public List<Soiree> getSoireesOrga(int id){
+        List<Soiree> soirees = new LinkedList<>();
+
+        // 1. build the query
+        String query = "SELECT * FROM "+TABLE_SOIREES+" WHERE organisateur="+id;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Soiree soiree = null;
+        if(cursor.moveToFirst()){
+            do{
+                soiree = new Soiree();
+                soiree.setId(Integer.parseInt(cursor.getString(0)));
+                soiree.setTitre(cursor.getString(1));
+                soiree.setDescription(cursor.getString(2));
+                soiree.setPrix(Double.parseDouble(cursor.getString(3)));
+                soiree.setCurrency(cursor.getString(4));
+                soiree.setDate(cursor.getString(5));
+                soiree.setHeure(cursor.getString(6));
+                soiree.setCoordonnees(cursor.getString(7));
+                soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
+
+                soirees.add(soiree);
+            }while(cursor.moveToNext());
+        }
+
+        Log.d("getSoireesOrga("+id+")", soirees.toString());
+
+        // 4. return soirees
+        return soirees;
+    }
 
 
     //*************************
@@ -293,10 +367,82 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Log.d("deleteSoiree", utilisateur.toString());
     }
 
+    //********************************
+    //METHODES POUR EVENEMENTS SUIVIS
+    //********************************
+    public void ajouterEvenementSuivi(int iduser, int idevent){
+        //for logging
+        Log.d("ajouterEvenementSuivi", iduser+" "+idevent);
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        //values.put(KEY_ID,soiree.getId());
+        values.put(KEY_IDUSER, iduser);
+        values.put(KEY_IDEVENT, idevent);
+
+        // 3. insert
+        db.insert(TABLE_MYFOLLEWEVENT, null, values);
+
+        // 4. close
+        db.close();
+    }
+
+    public boolean estSuiviEvent(int iduser, int idevent){
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor = db.query(TABLE_MYFOLLEWEVENT, null, "iduser = ? AND idevent = ?", new String[]{String.valueOf(iduser),String.valueOf(idevent)}, null, null, null, null);
+
+        // 3. if we got results get the first one
+        if(cursor.getCount()!=0) {
+            return true;
+        }
+        return false;
+    }
+
+    //********************************
+    //METHODES POUR UTILISATEURS SUIVIS
+    //********************************
+    public void ajouterUtilisateurSuivi(int idsuiveur, int idsuivi){
+        //for logging
+        Log.d("ajouterUtilisateurSuivi", idsuiveur+" "+idsuivi);
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. create ContentValues to add key "column"/value
+        ContentValues values = new ContentValues();
+        //values.put(KEY_ID,soiree.getId());
+        values.put(KEY_IDSUIVEUR, idsuiveur);
+        values.put(KEY_IDSUIVI, idsuivi);
+
+        // 3. insert
+        db.insert(TABLE_MYFOLLOWUSER, null, values);
+
+        // 4. close
+        db.close();
+    }
+
+    public boolean estSuiviUser(int idsuiveur, int idsuivi){
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor = db.query(TABLE_MYFOLLOWUSER, null, "idusersuiveur = ? AND idusersuivi = ?", new String[]{String.valueOf(idsuiveur),String.valueOf(idsuivi)}, null, null, null, null);
+
+        // 3. if we got results get the first one
+        if(cursor.getCount()!=0) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("DROP TABLE IF EXISTS soirees");
-
         //SQL statement to create user table
         String CREATE_USER_TABLE = "CREATE TABLE utilisateurs ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,"+
@@ -318,10 +464,52 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "coordonnees TEXT NOT NULL,"+
                 "organisateur INTEGER NOT NULL);";
 
+        //SQL statement to create user's created events
+        String CREATE_MYCREATEEVENT_TABLE = "CREATE TABLE mycreatedevent ("+
+                "iduser INTEGER, idevent INTEGER);";
+
+        //SQL statement to create user's followed events
+        String CREATE_MYFOLLOWEVENT_TABLE = "CREATE TABLE myfollowevent ("+
+                "iduser INTEGER, idevent INTEGER);";
+
+        //SQL statement to create user's followed users
+        String CREATE_MYFOLLOWUSER_TABLE = "CREATE TABLE myfollowuser ("+
+                "idusersuiveur INTEGER, idusersuivi INTEGER);";
+
         //create soirees table
         db.execSQL(CREATE_SOIREE_TABLE);
         //create utilisateurs table
         db.execSQL(CREATE_USER_TABLE);
+        //create others tables
+        db.execSQL(CREATE_MYCREATEEVENT_TABLE);
+        db.execSQL(CREATE_MYFOLLOWEVENT_TABLE);
+        db.execSQL(CREATE_MYFOLLOWUSER_TABLE);
+
+
+        //Insérer des valeurs dans la BDD
+        String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','user1','user1');";
+        db.execSQL(createUser);
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user2','user2','user2','user2','user2');";
+        db.execSQL(createUser);
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user3','user3','user3','user3','user3');";
+        db.execSQL(createUser);
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user4','user4','user4','user4','user4');";
+        db.execSQL(createUser);
+
+        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        db.execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        db.execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
+        db.execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
+        db.execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        db.execSQL(createSoiree);
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        db.execSQL(createSoiree);
+
+
     }
 
     @Override

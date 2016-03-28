@@ -42,4 +42,10 @@ public class Accueil extends AppCompatActivity {
         da.setClass(this, RechercherSoiree.class);
         startActivity(da);
     }
+
+    public void onClickAdmin(View view){
+        Intent da = new Intent();
+        da.setClass(this, AdminActivity.class);
+        startActivity(da);
+    }
 }

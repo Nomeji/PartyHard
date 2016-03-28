@@ -36,7 +36,7 @@ public class Soiree {
         this.coordonnees = coordonnees;
         this.organisateur = organisateur;
     }
-
+/*
     public LinearLayout toSelectionLayout(Context context){
         LinearLayout temp = new LinearLayout(context);
         temp.setOrientation(LinearLayout.VERTICAL);
@@ -59,7 +59,7 @@ public class Soiree {
 
         TextView tvHeure = new TextView(context);
         tvHeure.setText(this.heure);*/
-
+/*
         TextView tvDateHeure = new TextView(context);
         String dateHeure = "Le "+this.date+" à "+this.heure;
         tvDateHeure.setText(dateHeure);
@@ -93,7 +93,7 @@ public class Soiree {
         temp.addView(ll3);
         return temp;
     }
-
+*/
 
     public int getId() {
         return id;
