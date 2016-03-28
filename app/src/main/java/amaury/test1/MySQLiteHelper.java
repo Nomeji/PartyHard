@@ -609,7 +609,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         createUser = "INSERT INTO utilisateurs VALUES (NULL,'user3','user3','user3','user3','user3');";
         db.execSQL(createUser);
         createUser = "INSERT INTO utilisateurs VALUES (NULL,'user4','user4','user4','user4','user4');";
+
         db.execSQL(createUser);
+        String createType = "INSERT INTO type VALUES (1, 'soiree');";
+        db.execSQL(createType);
+        createType = "INSERT INTO type VALUES (2, 'sortie');";
+        db.execSQL(createType);
+        createType = "INSERT INTO type VALUES (3, 'concert');";
+        db.execSQL(createType);
 
         String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
         db.execSQL(createSoiree);
@@ -641,12 +648,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         createCompo = "INSERT INTO compotype VALUES (3, 5);";
         db.execSQL(createSoiree);
 
-        String createType = "INSERT INTO type VALUES (1, 'soiree');";
-        db.execSQL(createType);
-        createType = "INSERT INTO type VALUES (2, 'sortie');";
-        db.execSQL(createType);
-        createType = "INSERT INTO type VALUES (3, 'concert');";
-        db.execSQL(createType);
 
 
     }
