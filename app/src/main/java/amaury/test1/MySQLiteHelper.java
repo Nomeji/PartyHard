@@ -583,6 +583,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String CREATE_MYFOLLOWUSER_TABLE = "CREATE TABLE myfollowuser ("+
                 "idusersuiveur INTEGER, idusersuivi INTEGER);";
 
+        //SQL statement to create type
+        String CREATE_TYPE_TABLE = "CREATE TABLE type ("+
+                "idtype INTEGER, nomtype VARCHAR);";
+        //SQL statement to create type
+        String CREATE_COMPOTYPE_TABLE = "CREATE TABLE compotype ("+
+                "idtype INTEGER, idsoiree INTEGER);";
         //create soirees table
         db.execSQL(CREATE_SOIREE_TABLE);
         //create utilisateurs table
@@ -591,7 +597,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MYCREATEEVENT_TABLE);
         db.execSQL(CREATE_MYFOLLOWEVENT_TABLE);
         db.execSQL(CREATE_MYFOLLOWUSER_TABLE);
-
+        //create type et compotype
+        db.execSQL(CREATE_TYPE_TABLE);
+        db.execSQL(CREATE_COMPOTYPE_TABLE);
 
         //Insérer des valeurs dans la BDD
         String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','user1','user1');";
@@ -615,6 +623,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(createSoiree);
         createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
         db.execSQL(createSoiree);
+
+        String createType = "INSERT INTO type VALUES (1, 'soiree');";
+        db.execSQL(createType);
+        createType = "INSERT INTO type VALUES (2, 'sortie');";
+        db.execSQL(createType);
+        createType = "INSERT INTO type VALUES (3, 'concert');";
+        db.execSQL(createType);
 
 
     }
