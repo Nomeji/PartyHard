@@ -82,8 +82,8 @@
         <item>$</item>
     </string-array>
 
-    //A remplacer pas un DatePicker
-    <string-array name="jour_arrays">
+    //A remplacer pas un DatePicker maybe
+    <integer-array name="jour_arrays">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -117,9 +117,9 @@
         <item>31</item>
 
 
-    </string-array>
+    </integer-array>
 
-    <string-array name="mois_arrays">
+    <integer-array name="mois_arrays">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -132,10 +132,10 @@
         <item>10</item>
         <item>11</item>
         <item>12</item>
-    </string-array>
+    </integer-array>
 
-    <string-array name="annee_arrays">
+    <integer-array name="annee_arrays">
         <item>2016</item>
         <item>2017</item>
-    </string-array>
+    </integer-array>
 </resources>

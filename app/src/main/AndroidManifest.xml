@@ -6,8 +6,6 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_CALENDAR" />
-    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
     <application
         android:name=".MainApplicationVariables"
@@ -16,7 +14,7 @@
         android:label="PartyHard"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Accueil" />
+        <activity android:name=".Accueil"></activity>
         <activity
             android:name=".VueOptions"
             android:label="@string/title_activity_vue_options" />
@@ -29,9 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AffichageSoiree" />
-        <activity android:name=".AdminActivity" />
-        <activity android:name=".AffichageUtilisateur"></activity>
+        <activity android:name=".AffichageSoiree"></activity>
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

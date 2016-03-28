@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -246,6 +247,57 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return soirees;
     }
 
+    //Requêtes pour RechercheSoirée
+    public ArrayList<Soiree> getRechercheSoiree(int types, boolean gratuit, ArrayList<String> soirees ){
+        ArrayList<Soiree> soireesResult = new ArrayList<>();
+
+
+        if ( (types==1) && gratuit ){
+            String query1 = "SELECT * FROM "+TABLE_SOIREES;
+        }
+
+        else if(types == 1 && !gratuit){
+            String query2 = "SELECT * FROM "+TABLE_SOIREES;
+        }
+
+        else if(types == 2 && gratuit){
+            String query3 = "SELECT * FROM "+TABLE_SOIREES;
+        }
+
+        else if(types == 2 && !gratuit){
+            String query4 = "SELECT * FROM "+TABLE_SOIREES;
+        }
+
+        else if(types == 3 && gratuit){
+            String query5 = "SELECT * FROM "+TABLE_SOIREES;
+        }
+
+        else if(types == 3 && !gratuit){
+            String query6 = "SELECT * FROM "+TABLE_SOIREES;
+        }
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query,null);
+
+        // 3. go over each row, build book and add it to list
+        Soiree soiree = null;
+        if(cursor.moveToFirst()){
+            do{
+                soiree = new Soiree();
+                soiree.setId(Integer.parseInt(cursor.getString(0)));
+                soiree.setTitre(cursor.getString(1));
+                soiree.setDescription(cursor.getString(2));
+                soiree.setPrix(Double.parseDouble(cursor.getString(3)));
+                soiree.setCurrency(cursor.getString(4));
+                soiree.setDate(cursor.getString(5));
+                soiree.setHeure(cursor.getString(6));
+                soiree.setCoordonnees(cursor.getString(7));
+                soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
+
+                soirees.add(soiree);
+            }while(cursor.moveToNext());
+        }
 
     //*************************
     //METHODES POUR LES UTILISATEURS
