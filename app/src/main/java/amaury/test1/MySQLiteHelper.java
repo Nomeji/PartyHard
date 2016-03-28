@@ -268,7 +268,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         }
 
         if ((types == 1)) {
-            String query1 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = " + soirees.get(1) + " and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
+            String query1 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = '" + soirees.get(1) + "' and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
             // 2. get reference to writable DB
             SQLiteDatabase db1 = this.getWritableDatabase();
             Cursor cursor = db1.rawQuery(query1, null);
@@ -295,7 +295,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }
         }
             else if (types == 2) {
-                String query2 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = " + soirees.get(1) + "and t.nomtype =" + soirees.get(2) + " and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
+                String query2 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = '" + soirees.get(1) + "' and t.nomtype ='" + soirees.get(2) + "' and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
                 // 2. get reference to writable DB
                 SQLiteDatabase db2 = this.getWritableDatabase();
                 Cursor cursor = db2.rawQuery(query2, null);
@@ -321,7 +321,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
             }
             else if (types == 3) {
-                String query3 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = " + soirees.get(1) + "and t.nomtype =" + soirees.get(2) + " and t.nomtye =" + soirees.get(3) + " and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
+                String query3 = "SELECT ts.idsoiree FROM soiree s typesoiree ts type t WHERE t.nomtype = '" + soirees.get(1) + "' and t.nomtype ='" + soirees.get(2) + "' and t.nomtye ='" + soirees.get(3) + "' and s.prix" + signe + "0 and ts.idtype = t.numtype and ts.idsoiree = ts.id";
                 // 2. get reference to writable DB
                 SQLiteDatabase db3 = this.getWritableDatabase();
                 Cursor cursor = db3.rawQuery(query3, null);
