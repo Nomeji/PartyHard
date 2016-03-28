@@ -276,7 +276,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             String query6 = "SELECT * FROM "+TABLE_SOIREES;
         }
 
-        // 2. get reference to writable DB
+        /* 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query,null);
 
@@ -296,7 +296,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
 
                 soirees.add(soiree);
-            }while(cursor.moveToNext());
+            }while(cursor.moveToNext());*/
+        return (soireesResult);
         }
 
     //*************************
