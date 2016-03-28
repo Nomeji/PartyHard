@@ -1,5 +1,6 @@
 package amaury.test1;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -41,7 +42,9 @@ public class CreerSoiree extends AppCompatActivity {
         Soiree soiree = new Soiree(0,titre,desc,prix,curr,date,heure,coor,orga);
         bdd.addSoiree(soiree);
         bdd.close();
-
+        Toast.makeText(CreerSoiree.this, "Soirée créée", Toast.LENGTH_SHORT).show();
+        Intent da = new Intent(this,Accueil.class);
+        startActivity(da);
     }
 
 
