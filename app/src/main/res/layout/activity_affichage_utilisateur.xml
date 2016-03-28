@@ -23,11 +23,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
-        android:layout_below="@+id/tvUserNotation"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:numStars="5"
-        android:rating="4" />
+        android:rating="2"
+        android:stepSize="0.5"
+        android:focusable="false"
+        android:layout_above="@+id/ratingBarMaNote"
+        android:layout_toRightOf="@+id/tvUserNotation"
+        android:layout_toEndOf="@+id/tvUserNotation" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -57,7 +59,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Ses prochains évènements"
         android:id="@+id/tvUserProchainEvents"
-        android:layout_below="@+id/ratingBar"
+        android:layout_below="@+id/ratingBarMaNote"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -68,4 +70,23 @@
         android:layout_below="@+id/tvUserProchainEvents"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Ma Note"
+        android:id="@+id/tvUserMaNote"
+        android:layout_marginTop="29dp"
+        android:layout_below="@+id/tvUserNotation"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ratingBarMaNote"
+        android:layout_alignTop="@+id/tvUserMaNote"
+        android:layout_alignLeft="@+id/ratingBar"
+        android:layout_alignStart="@+id/ratingBar" />
 </RelativeLayout>

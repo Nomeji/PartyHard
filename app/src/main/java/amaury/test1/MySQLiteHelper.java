@@ -39,6 +39,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     //UtilisateursSuivis
     private static final String KEY_IDSUIVEUR="idusersuiveur";
     private static final String KEY_IDSUIVI="idusersuivi";
+    //Notation
+    private static final String KEY_IDNOTEUR="idusernoteur";
+    private static final String KEY_IDNOTE="idusernote";
+    private static final String KEY_NOTE="note";
 
 
 
@@ -58,6 +62,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_MYCREATEDEVENT = "mycreatedevent";
     private static final String TABLE_MYFOLLEWEVENT = "myfollowevent";
     private static final String TABLE_MYFOLLOWUSER = "myfollowuser";
+    private static final String TABLE_USERNOTATION = "usernotation";
+
 
 
     public MySQLiteHelper(Context context) {
@@ -168,7 +174,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query,null);
+        Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build book and add it to list
         Soiree soiree = null;
@@ -240,7 +246,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             }while(cursor.moveToNext());
         }
 
-        Log.d("getSoireesOrga("+id+")", soirees.toString());
+        Log.d("getSoireesOrga(" + id + ")", soirees.toString());
 
         // 4. return soirees
         return soirees;
@@ -441,6 +447,63 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return false;
     }
 
+    //********************************
+    //METHODES POUR NOTATION
+    //********************************
+    public void setNotation(int idnoteur, int idnote, float note){
+        //for logging
+        Log.d("setNotation", idnoteur+" "+idnote+" "+note);
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //On regarde si l'utilisateur a déjà noté l'organisateur
+        Cursor cursor = db.query(TABLE_USERNOTATION, null, "idusernoteur = ? AND idusernote = ?", new String[]{String.valueOf(idnoteur),String.valueOf(idnote)}, null, null, null, null);
+
+        //Si il a déjà été noté, on met à jour la note, sinon on ajoute la notation
+        if(cursor.getCount()!=0){
+            String query = "UPDATE usernotation SET note="+note+" WHERE idusernoteur="+idnoteur+" AND idusernote="+idnote+";";
+            db.execSQL(query);
+        }
+        else{
+            // 2. create ContentValues to add key "column"/value
+            ContentValues values = new ContentValues();
+            //values.put(KEY_ID,soiree.getId());
+            values.put(KEY_IDNOTEUR, idnoteur);
+            values.put(KEY_IDNOTE, idnote);
+            values.put(KEY_NOTE, note);
+
+            // 3. insert
+            db.insert(TABLE_USERNOTATION, null, values);
+        }
+
+        // 4. close
+        db.close();
+    }
+
+    public float getNotation(int iduser){
+        float note = 0;
+        int i = 0;
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor = db.query(TABLE_USERNOTATION, new String[]{KEY_NOTE}, "idusernote = ?", new String[]{String.valueOf(iduser)}, null, null, null, null);
+
+        // 3. if we got results get the first one
+        if(cursor.getCount()!=0) {
+            cursor.moveToFirst();
+            note += cursor.getFloat(0);
+            i++;
+            while(cursor.moveToNext()){
+                note += cursor.getFloat(0);
+                i++;
+            }
+            note = note / i;
+        }
+        return note;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         //SQL statement to create user table
@@ -466,15 +529,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         //SQL statement to create user's created events
         String CREATE_MYCREATEEVENT_TABLE = "CREATE TABLE mycreatedevent ("+
-                "iduser INTEGER, idevent INTEGER);";
+                "iduser INTEGER NOT NULL, idevent INTEGER NOT NULL);";
 
         //SQL statement to create user's followed events
         String CREATE_MYFOLLOWEVENT_TABLE = "CREATE TABLE myfollowevent ("+
-                "iduser INTEGER, idevent INTEGER);";
+                "iduser INTEGER NOT NULL, idevent INTEGER NOT NULL);";
 
         //SQL statement to create user's followed users
         String CREATE_MYFOLLOWUSER_TABLE = "CREATE TABLE myfollowuser ("+
-                "idusersuiveur INTEGER, idusersuivi INTEGER);";
+                "idusersuiveur INTEGER NOT NULL, idusersuivi INTEGER NOT NULL);";
+
+        //SQL statement to create user's notation
+        String CREATE_USERNOTATION_TABLE = "CREATE TABLE usernotation ("+
+                "idusernoteur INTEGER NOT NULL, idusernote INTEGER NOT NULL, note FLOAT NOT NULL);";
 
         //create soirees table
         db.execSQL(CREATE_SOIREE_TABLE);
@@ -484,9 +551,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MYCREATEEVENT_TABLE);
         db.execSQL(CREATE_MYFOLLOWEVENT_TABLE);
         db.execSQL(CREATE_MYFOLLOWUSER_TABLE);
+        db.execSQL(CREATE_USERNOTATION_TABLE);
 
 
         //Insérer des valeurs dans la BDD
+        //Utilisateurs
         String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','user1','user1');";
         db.execSQL(createUser);
         createUser = "INSERT INTO utilisateurs VALUES (NULL,'user2','user2','user2','user2','user2');";
@@ -496,18 +565,33 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         createUser = "INSERT INTO utilisateurs VALUES (NULL,'user4','user4','user4','user4','user4');";
         db.execSQL(createUser);
 
-        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        //Soirees
+        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','On va regarder Deadpool !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Y aura du gateau !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','On a 12 bars à faire !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
         db.execSQL(createSoiree);
         createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','On est bien bien bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Y aura de la tarte au concombre', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
         db.execSQL(createSoiree);
+
+        //Notation
+        String createNotation = "INSERT INTO usernotation VALUES (1,3,2.5);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (2,3,5);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (3,3,4);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (4,3,3.5);";
+        db.execSQL(createNotation);
+
+        //Créer les trigger de MAJ des tables
+        //String trigger = "CREATE TRIGGER trigger_notation AFTER INSERT, UPDATE ON usernotation BEGIN END;";
+        //db.execSQL(trigger);
 
 
     }

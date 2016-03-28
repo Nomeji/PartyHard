@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +104,17 @@ public class AffichageUtilisateur extends AppCompatActivity {
             }
         });
 
+        //Remplir la barre de notation (étoiles)
+        RatingBar rb = (RatingBar) findViewById(R.id.ratingBar);
+        rb.setIsIndicator(true);
+        bdd = new MySQLiteHelper(this);
+        float nota = bdd.getNotation(idorga);
+        bdd.close();
+        rb.setRating(nota);
+
+        //Ajout du listener sur le rating barre de notation par l'user courant
+        addListenerOnRatingBar();
+
     }
 
     public void onClickSuivreOrga(View view){
@@ -113,5 +125,21 @@ public class AffichageUtilisateur extends AppCompatActivity {
         Button btn = (Button) findViewById(R.id.buttonSuivreOrganisateur);
         btn.setEnabled(false);
         btn.setText("Vous suivez déjà l'organisateur");
+    }
+
+    public void addListenerOnRatingBar() {
+
+        RatingBar  rb = (RatingBar) findViewById(R.id.ratingBarMaNote);
+
+        //if rating value is changed,
+        //display the current rating value in the result (textview) automatically
+        rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+               MySQLiteHelper bdd = new MySQLiteHelper(getApplicationContext());
+                bdd.setNotation(iduser,idorga,rating);
+                bdd.close();
+                Toast.makeText(AffichageUtilisateur.this, "Notation enregistrée", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
