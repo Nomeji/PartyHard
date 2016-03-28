@@ -14,6 +14,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        MySQLiteHelper bdd = new MySQLiteHelper(this);
+        bdd.close();
     }
 
     public void onClickSeConnecter(View view){
@@ -55,6 +57,5 @@ public class LoginActivity extends AppCompatActivity {
         bdd.addUtilisateur(utilisateur);
         bdd.close();
     }
-
 
 }
