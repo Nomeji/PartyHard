@@ -43,10 +43,12 @@ public class AffichageSoiree extends AppCompatActivity {
         tv.setText(String.valueOf(soiree.getOrganisateur()));
 
         tv = (TextView) findViewById(R.id.tvAffDate);
-        tv.setText(String.valueOf(soiree.getDate()));
+        String dateSoiree = soiree.getJour()+"/"+soiree.getMois()+"/"+soiree.getAnnee();
+        tv.setText(dateSoiree);
 
         tv = (TextView) findViewById(R.id.tvAffHeure);
-        tv.setText(String.valueOf(soiree.getHeure()));
+        String heureSoiree = soiree.getHeures()+"h"+soiree.getMinutes();
+        tv.setText(heureSoiree);
 
         tv = (TextView) findViewById(R.id.tvAffPrix);
         String prix = String.valueOf(soiree.getPrix())+soiree.getCurrency();
@@ -73,7 +75,7 @@ public class AffichageSoiree extends AppCompatActivity {
 
         smsIntent.setData(Uri.parse("smsto:"));
         smsIntent.setType("vnd.android-dir/mms-sms");
-        String message = "Je vais à la soirée "+soiree.getTitre()+" le "+soiree.getDate()+" à "+soiree.getHeure()+" à "+soiree.getCoordonnees()+", ça te dit ?";
+        String message = "Je vais à la soirée "+soiree.getTitre()+" le "+soiree.getJour()+"/"+soiree.getMois()+"/"+soiree.getAnnee()+" à "+soiree.getHeures()+"h"+soiree.getMinutes()+" à "+soiree.getCoordonnees()+", ça te dit ?";
         smsIntent.putExtra("sms_body"  , message);
 
         try {
@@ -94,7 +96,7 @@ public class AffichageSoiree extends AppCompatActivity {
         calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, soiree.getCoordonnees());
         calIntent.putExtra(CalendarContract.Events.DESCRIPTION, soiree.getDescription());
 
-        GregorianCalendar calDate = new GregorianCalendar(2016,03,30);
+        GregorianCalendar calDate = new GregorianCalendar(soiree.getAnnee(),soiree.getMois(),soiree.getJour(),soiree.getHeures(),soiree.getMinutes());
         calIntent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
         calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                 calDate.getTimeInMillis());
