@@ -267,6 +267,90 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return soirees;
     }
 
+    public List<Soiree> getRechercheSoiree(boolean gratuit, boolean soiree, boolean concert, boolean sortie, int jour, int mois, int annee) {
+        List<Soiree> soirees = new LinkedList<>();
+        String requete  = "";
+        int nbType = 0;
+
+        String gratuite = "";
+        String type1 = "";
+        String type2 = "";
+        String type3 = "";
+        if (gratuit) {
+            gratuite = "=";
+        } else gratuite = ">=";
+        if (soiree && concert && sortie) {
+            type1 = "soiree";
+            type2 = "concert";
+            type3 = "sortie";
+            nbType = 3;
+        } else if (soiree && sortie) {
+            type1 = "soiree";
+            type2 = "sortie";
+            nbType = 2;
+        } else if (soiree && concert) {
+            type1 = "soiree";
+            type2 = "concert";
+            nbType = 2;
+        } else if (sortie && concert) {
+            type1 = "sortie";
+            type2 = "concert";
+            nbType = 2;
+        } else if (sortie) {
+            type1 = "sortie";
+            nbType = 1;
+        } else if (soiree) {
+            type1 = "soiree";
+            nbType = 1;
+        } else if (concert) {
+            type1 = "concert";
+            nbType = 1;
+        } else {
+            nbType = 0;
+        }
+        switch (nbType){
+            case 3: // 1. build query
+                requete = "SELECT * FROM Soiree S, Type T, CompoType CP Where jour=" + jour + " and mois=" + mois + " and annee=" + annee + " and prix" + gratuite + "0 GROUP BY cp.id_soiree HAVING count(*) = 3"; // A MODIFIER
+                break;
+            case 2:
+                requete = "select * From Soiree S, Type T1, Type T2, CompoType CP1, CompoType CP2 where T1.nomType="+type1+" and T2.nomType="+type2+" and CP1.numtype=T1.numtype and CP2.numType=T2.numtype and S.numSoiree=CP1.numSoireee and S.numSoiree=CP2.numSoiree and jour=" + jour + " and mois=" + mois + " and annee=" + annee + " and prix" + gratuite + "0";
+                break;
+            case 1:
+                requete = "SELECT * FROM Soiree S, Type T, CompoType CP Where jour=" + jour + " and mois=" + mois + " and annee=" + annee + " and prix" + gratuite + "0 and T.nomType="+type1+" and CP.numtype=t.numType and S.numSoiree=CP.numSoiree";
+                break;
+            case 0:
+                requete = "SELECT * From SOIREE Where jour=" + jour + " and mois=" + mois + " and annee=" + annee + " and prix" + gratuite + "0";
+                break;
+            default:
+                throw new Error("Erreur nbType");
+        }
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(requete, null);
+        // 3. go over each row, build book and add it to list
+        Soiree soireeTmp = null;
+        if (cursor.moveToFirst()) {
+            do {
+                soireeTmp = new Soiree();
+                soireeTmp.setId(Integer.parseInt(cursor.getString(0)));
+                soireeTmp.setTitre(cursor.getString(1));
+                soireeTmp.setDescription(cursor.getString(2));
+                soireeTmp.setPrix(Double.parseDouble(cursor.getString(3)));
+                soireeTmp.setCurrency(cursor.getString(4));
+                soireeTmp.setJour(Integer.parseInt(cursor.getString(5)));
+                soireeTmp.setMois(Integer.parseInt(cursor.getString(6)));
+                soireeTmp.setAnnee(Integer.parseInt(cursor.getString(7)));
+                soireeTmp.setHeures(Integer.parseInt(cursor.getString(8)));
+                soireeTmp.setMinutes(Integer.parseInt(cursor.getString(9)));
+                soireeTmp.setCoordonnees(cursor.getString(10));
+                soireeTmp.setOrganisateur(Integer.parseInt(cursor.getString(11)));
+
+                soirees.add(soireeTmp);
+            } while (cursor.moveToNext());
+        }
+        return (soirees);
+    }
+
 
     //*************************
     //METHODES POUR LES UTILISATEURS
