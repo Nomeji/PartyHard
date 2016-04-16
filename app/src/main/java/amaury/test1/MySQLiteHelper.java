@@ -561,6 +561,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String CREATE_USERNOTATION_TABLE = "CREATE TABLE usernotation ("+
                 "idusernoteur INTEGER NOT NULL, idusernote INTEGER NOT NULL, note FLOAT NOT NULL);";
 
+        //SQL statement to create user's notation
+        String CREATE_TYPE_TABLE = "CREATE TABLE type ("+
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, nom TEXT NOT NULL);";
+
+        //SQL statement to create user's notation
+        String CREATE_COMPOTYPE_TABLE = "CREATE TABLE compotype ("+
+                "idtype INTEGER NOT NULL, idevent INTEGER NOT NULL);";
+
         //create soirees table
         db.execSQL(CREATE_SOIREE_TABLE);
         //create utilisateurs table
@@ -570,6 +578,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MYFOLLOWEVENT_TABLE);
         db.execSQL(CREATE_MYFOLLOWUSER_TABLE);
         db.execSQL(CREATE_USERNOTATION_TABLE);
+        db.execSQL(CREATE_TYPE_TABLE);
+        db.execSQL(CREATE_COMPOTYPE_TABLE);
 
 
         //Insérer des valeurs dans la BDD
