@@ -23,8 +23,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_DESC="description";
     private static final String KEY_PRIX="prix";
     private static final String KEY_CURR="currency";
-    private static final String KEY_DATE="date";
-    private static final String KEY_HEURE="heure";
+    private static final String KEY_JOUR="jour";
+    private static final String KEY_MOIS="mois";
+    private static final String KEY_ANNEE="annee";
+    private static final String KEY_HEURE="heures";
+    private static final String KEY_MINUTE="minutes";
     private static final String KEY_COORD="coordonnees";
     private static final String KEY_ORGA="organisateur";
     //Utilisateurs
@@ -46,7 +49,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 
 
-    private static final String[] COLUMNS_SOIREE = {KEY_ID,KEY_TITLE,KEY_DESC,KEY_PRIX,KEY_CURR,KEY_DATE,KEY_HEURE,KEY_COORD,KEY_ORGA};
+    private static final String[] COLUMNS_SOIREE = {KEY_ID,KEY_TITLE,KEY_DESC,KEY_PRIX,KEY_CURR,KEY_JOUR,KEY_MOIS,KEY_ANNEE,KEY_HEURE,KEY_MINUTE,KEY_COORD,KEY_ORGA};
     private static final String[] COLUMNS_UTILISATEUR = {KEY_ID,KEY_LOGIN,KEY_PSWRD,KEY_EMAIL,KEY_NOM,KEY_PRENOM};
 
 
@@ -122,8 +125,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(KEY_DESC, soiree.getDescription());
         values.put(KEY_PRIX, soiree.getPrix());
         values.put(KEY_CURR, soiree.getCurrency());
-        values.put(KEY_DATE, soiree.getDate());
-        values.put(KEY_HEURE, soiree.getHeure());
+        values.put(KEY_JOUR, soiree.getJour());
+        values.put(KEY_MOIS, soiree.getMois());
+        values.put(KEY_ANNEE, soiree.getAnnee());
+        values.put(KEY_HEURE, soiree.getHeures());
+        values.put(KEY_MINUTE, soiree.getMinutes());
         values.put(KEY_COORD, soiree.getCoordonnees());
         values.put(KEY_ORGA, soiree.getOrganisateur());
 
@@ -154,10 +160,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         soiree.setDescription(cursor.getString(2));
         soiree.setPrix(Double.parseDouble(cursor.getString(3)));
         soiree.setCurrency(cursor.getString(4));
-        soiree.setDate(cursor.getString(5));
-        soiree.setHeure(cursor.getString(6));
-        soiree.setCoordonnees(cursor.getString(7));
-        soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
+        soiree.setJour(Integer.parseInt(cursor.getString(5)));
+        soiree.setMois(Integer.parseInt(cursor.getString(6)));
+        soiree.setAnnee(Integer.parseInt(cursor.getString(7)));
+        soiree.setHeures(Integer.parseInt(cursor.getString(8)));
+        soiree.setMinutes(Integer.parseInt(cursor.getString(9)));
+        soiree.setCoordonnees(cursor.getString(10));
+        soiree.setOrganisateur(Integer.parseInt(cursor.getString(11)));
 
         //log
         Log.d("getSoiree(" + id + ")", soiree.toString());
@@ -186,10 +195,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 soiree.setDescription(cursor.getString(2));
                 soiree.setPrix(Double.parseDouble(cursor.getString(3)));
                 soiree.setCurrency(cursor.getString(4));
-                soiree.setDate(cursor.getString(5));
-                soiree.setHeure(cursor.getString(6));
-                soiree.setCoordonnees(cursor.getString(7));
-                soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
+                soiree.setJour(Integer.parseInt(cursor.getString(5)));
+                soiree.setMois(Integer.parseInt(cursor.getString(6)));
+                soiree.setAnnee(Integer.parseInt(cursor.getString(7)));
+                soiree.setHeures(Integer.parseInt(cursor.getString(8)));
+                soiree.setMinutes(Integer.parseInt(cursor.getString(9)));
+                soiree.setCoordonnees(cursor.getString(10));
+                soiree.setOrganisateur(Integer.parseInt(cursor.getString(11)));
 
                 soirees.add(soiree);
             }while(cursor.moveToNext());
@@ -237,10 +249,13 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 soiree.setDescription(cursor.getString(2));
                 soiree.setPrix(Double.parseDouble(cursor.getString(3)));
                 soiree.setCurrency(cursor.getString(4));
-                soiree.setDate(cursor.getString(5));
-                soiree.setHeure(cursor.getString(6));
-                soiree.setCoordonnees(cursor.getString(7));
-                soiree.setOrganisateur(Integer.parseInt(cursor.getString(8)));
+                soiree.setJour(Integer.parseInt(cursor.getString(5)));
+                soiree.setMois(Integer.parseInt(cursor.getString(6)));
+                soiree.setAnnee(Integer.parseInt(cursor.getString(7)));
+                soiree.setHeures(Integer.parseInt(cursor.getString(8)));
+                soiree.setMinutes(Integer.parseInt(cursor.getString(9)));
+                soiree.setCoordonnees(cursor.getString(10));
+                soiree.setOrganisateur(Integer.parseInt(cursor.getString(11)));
 
                 soirees.add(soiree);
             }while(cursor.moveToNext());
@@ -522,8 +537,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "description TEXT NOT NULL,"+
                 "prix DOUBLE NOT NULL,"+
                 "currency TEXT NOT NULL,"+
-                "date TEXT NOT NULL,"+
-                "heure TEXT NOT NULL,"+
+                "jour INTEGER NOT NULL,"+
+                "mois INTEGER NOT NULL,"+
+                "annee INTEGER NOT NULL,"+
+                "heures INTEGER NOT NULL,"+
+                "minutes INTEGER NOT NULL,"+
                 "coordonnees TEXT NOT NULL,"+
                 "organisateur INTEGER NOT NULL);";
 
@@ -566,17 +584,17 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(createUser);
 
         //Soirees
-        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','On va regarder Deadpool !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','On va regarder Deadpool !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',1);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Y aura du gateau !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Y aura du gateau !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',1);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','On a 12 bars à faire !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','On a 12 bars à faire !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',2);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',2);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','On est bien bien bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','On est bien bien bien bien bien !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',3);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Y aura de la tarte au concombre', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Y aura de la tarte au concombre', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',3);";
         db.execSQL(createSoiree);
 
         //Notation
@@ -599,8 +617,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Drop older soirees table if existed
-        db.execSQL("DROP TABLE IF EXISTS soirees");
-        db.execSQL("DROP TABLE IF EXISTS utilisateurs");
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_SOIREES);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_MYCREATEDEVENT);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_MYFOLLEWEVENT);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_MYFOLLOWUSER);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_USERNOTATION);
 
         //Create fresh soirees table
         this.onCreate(db);

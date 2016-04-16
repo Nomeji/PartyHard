@@ -116,13 +116,11 @@
                 android:text="Date : "
                 android:id="@+id/textView6" />
 
-            <EditText
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:ems="10"
-                android:id="@+id/champDate"
-                android:layout_weight="1" />
+                android:text="Choisir Date"
+                android:id="@+id/buttonChoisirDate" />
 
         </LinearLayout>
 
@@ -139,13 +137,11 @@
                 android:text="Heure : "
                 android:id="@+id/textView7" />
 
-            <EditText
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:ems="10"
-                android:id="@+id/champHeure"
-                android:layout_weight="1" />
+                android:text="Choisir Heure"
+                android:id="@+id/buttonChoisirHeure" />
 
         </LinearLayout>
 

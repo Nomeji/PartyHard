@@ -17,83 +17,30 @@ public class Soiree {
     private String description;
     private double prix;
     private String currency;
-    private String date;
-    private String heure;
+    //private String date;
+    private int jour, mois, annee;
+    //private String heure;
+    private int heures, minutes;
     private String coordonnees;
     private int organisateur;
 
     public Soiree(){
     }
 
-    public Soiree(int id, String titre, String description, double prix, String currency, String date, String heure, String coordonnees, int organisateur) {
+    public Soiree(int id, String titre, String description, double prix, String currency, int jour, int mois, int annee, int heures, int minutes, String coordonnees, int organisateur) {
         this.id = id;
         this.titre = titre;
         this.description = description;
         this.prix = prix;
         this.currency = currency;
-        this.date = date;
-        this.heure = heure;
+        this.jour = jour;
+        this.mois = mois;
+        this.annee = annee;
+        this.heures = heures;
+        this.minutes = minutes;
         this.coordonnees = coordonnees;
         this.organisateur = organisateur;
     }
-/*
-    public LinearLayout toSelectionLayout(Context context){
-        LinearLayout temp = new LinearLayout(context);
-        temp.setOrientation(LinearLayout.VERTICAL);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        params.weight = 2.0f;
-        TextView tvTitre = new TextView(context);
-        tvTitre.setText(this.titre);
-        tvTitre.setLayoutParams(params);
-
-        TextView tvPrix = new TextView(context);
-        String prixT = this.prix+this.currency;
-        tvPrix.setText(prixT);
-
-        /*TextView tvDesc = new TextView(context);
-        tvDesc.setText(this.description);*/
-
-        /*TextView tvDate = new TextView(context);
-        tvDate.setText(this.date);
-
-        TextView tvHeure = new TextView(context);
-        tvHeure.setText(this.heure);*/
-/*
-        TextView tvDateHeure = new TextView(context);
-        String dateHeure = "Le "+this.date+" à "+this.heure;
-        tvDateHeure.setText(dateHeure);
-        tvDateHeure.setLayoutParams(params);
-
-        TextView tvCoordonnees = new TextView(context);
-        tvCoordonnees.setText(this.coordonnees);
-
-
-        LinearLayout ll1 = new LinearLayout(context);
-        ll1.setOrientation(LinearLayout.HORIZONTAL);
-        tvPrix.setGravity(3);
-        ll1.addView(tvTitre);
-        ll1.addView(tvPrix);
-
-        LinearLayout ll2 = new LinearLayout(context);
-        ll2.setOrientation(LinearLayout.HORIZONTAL);
-        ll2.addView(tvDateHeure);
-        ll2.addView(tvCoordonnees);
-
-        TextView tvOrga = new TextView(context);
-        String orgaT = "ID de l'organisateur : "+this.organisateur;
-        tvOrga.setText(orgaT);
-
-        LinearLayout ll3 = new LinearLayout(context);
-        ll3.setOrientation(LinearLayout.HORIZONTAL);
-        ll3.addView(tvOrga);
-
-        temp.addView(ll1);
-        temp.addView(ll2);
-        temp.addView(ll3);
-        return temp;
-    }
-*/
 
     public int getId() {
         return id;
@@ -123,6 +70,46 @@ public class Soiree {
         return prix;
     }
 
+    public int getJour() {
+        return jour;
+    }
+
+    public void setJour(int jour) {
+        this.jour = jour;
+    }
+
+    public int getMois() {
+        return mois;
+    }
+
+    public void setMois(int mois) {
+        this.mois = mois;
+    }
+
+    public int getAnnee() {
+        return annee;
+    }
+
+    public void setAnnee(int annee) {
+        this.annee = annee;
+    }
+
+    public int getHeures() {
+        return heures;
+    }
+
+    public void setHeures(int heures) {
+        this.heures = heures;
+    }
+
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
     public void setPrix(double prix) {
         this.prix = prix;
     }
@@ -133,22 +120,6 @@ public class Soiree {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getHeure() {
-        return heure;
-    }
-
-    public void setHeure(String heure) {
-        this.heure = heure;
     }
 
     public String getCoordonnees() {
@@ -169,6 +140,6 @@ public class Soiree {
 
     @Override
     public String toString(){
-        return "titre : "+titre+"; description : "+description+"; prix : "+prix+" "+currency+"; date : "+date+"; heure : "+heure+"; coordonnees : "+coordonnees+"; organisateur : "+organisateur;
+        return "titre : "+titre+"; description : "+description+"; prix : "+prix+" "+currency+"; date : "+annee+mois+jour+"; heure : "+heures+minutes+"; coordonnees : "+coordonnees+"; organisateur : "+organisateur;
     }
 }
