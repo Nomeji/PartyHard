@@ -1,4 +1,4 @@
-package amaury.test1;
+package amaury.test1.Fragments;
 
 
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import amaury.test1.R;
 
 /**
  * A simple {@link Fragment} subclass.

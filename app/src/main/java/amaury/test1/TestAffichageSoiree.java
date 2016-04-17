@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import amaury.test1.Fragments.OptionsFragment;
+import amaury.test1.Fragments.RechercheFragment;
 import amaury.test1.Fragments.testFragment;
 
 public class TestAffichageSoiree extends AppCompatActivity {
@@ -124,6 +126,8 @@ public class TestAffichageSoiree extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
+            if(position==0)
+                return new RechercheFragment();
             if(position==1)
                 return new testFragment();
             if(position==2)
