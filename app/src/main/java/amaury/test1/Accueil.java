@@ -45,7 +45,10 @@ public class Accueil extends AppCompatActivity {
 
     public void onClickAdmin(View view){
         Intent da = new Intent();
-        da.setClass(this, AdminActivity.class);
+        da.setClass(this, TestAffichageSoiree.class);
         startActivity(da);
     }
+
+
+
 }
