@@ -35,7 +35,10 @@
         <activity android:name=".mainTest" />
         <activity android:name=".userProfil" />
         <activity android:name=".options" />
-        <activity android:name=".recherche"></activity>
+        <activity android:name=".recherche" />
+        <activity
+            android:name=".TestAffichageSoiree"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -25,7 +25,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Mon Profil"
-                android:id="@+id/button11" />
+                android:id="@+id/button11"
+                android:onClick="onClick"/>
 
             <Button
                 android:layout_width="fill_parent"
