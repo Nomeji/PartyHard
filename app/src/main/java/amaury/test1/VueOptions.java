@@ -111,56 +111,10 @@ public class VueOptions extends Activity {
 
     }
 
-  /*  public void remplirSoiree(View view){
-        //On récupère la BDD
-        MySQLiteHelper bdd = new MySQLiteHelper(this);
-        List<Soiree> liste = bdd.getAllSoirees();
-        for (Soiree s:liste
-             ) {
-            //L'affichage est encapsulé dans un LinearLayout pour chaque évènement
-            LinearLayout tmpL = s.toSelectionLayout(this);
-            tmpL.setBackgroundColor(getResources().getColor(R.color.blanc));
-            tmpL.setClickable(true);
-            //Teste juste le clique sur un évènement
-            tmpL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),String.format("Ca marche pas !"),Toast.LENGTH_SHORT).show();
-                }
-            });
-            LinearLayout ll = (LinearLayout) findViewById(R.id.contenuEvent);
-            ll.addView(tmpL);
-        }
-        bdd.close();
-    }*/
-
 
     public void onClickAccueil(View view){
         Intent da = new Intent();
         da.setClass(this, Accueil.class);
         startActivity(da);
     }
-/*
-    public void onClickAjouterEvent(View view){
-        /*RelativeLayout tmpL = new RelativeLayout(this);
-        TextView tmpT = new TextView(this);
-        tmpT.setText(String.format("Salut toi ! Ca va bien ?"));
-        tmpL.addView(tmpT);
-        Soiree s = new Soiree(1,"Titre","Description",15,"€","20/11/2017","21h45","Chez Patrick",1);
-        LinearLayout tmpL = s.toSelectionLayout(this);
-        tmpL.setBackgroundColor(getResources().getColor(R.color.blanc));
-        tmpL.setClickable(true);
-        tmpL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),String.format("Ca marche pas !"),Toast.LENGTH_SHORT).show();
-            }
-        });
-        LinearLayout ll = (LinearLayout) findViewById(R.id.contenuEvent);
-        ll.addView(tmpL);
-        //ScrollView sv = (ScrollView) findViewById(R.id.scrollViewTest);
-        //sv.addView(tmpL);
-    }
-
-*/
 }
