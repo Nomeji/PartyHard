@@ -8,8 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,38 +21,65 @@ import java.util.List;
 
 import amaury.test1.AffichageSoiree;
 import amaury.test1.AffichageSoireeOrganisateur;
+import amaury.test1.MainApplicationVariables;
 import amaury.test1.MySQLiteHelper;
 import amaury.test1.R;
 import amaury.test1.Soiree;
+import amaury.test1.Utilisateur;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RechercheFragment extends Fragment {
+public class AffichageOrganisateurFragment extends Fragment {
 
-    private ListView maListViewPerso;
 
-    public RechercheFragment() {
+    public AffichageOrganisateurFragment() {
         // Required empty public constructor
     }
 
 
+    private int idorga;
+    private int iduser = MainApplicationVariables.getUserID();
+    private Utilisateur orga;
+    private ListView maListViewPerso;
+    View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_affichage_organisateur, container, false);
 
 
-        View view = inflater.inflate(R.layout.fragment_recherche, container, false);
+        //On récupère l'ID de la soirée
+        idorga = getArguments().getInt("idorga");
+        Toast.makeText(getActivity(), "Utilisateur : " + idorga, Toast.LENGTH_SHORT).show();
 
+        //On recherche la soirée dans la BDD
         MySQLiteHelper bdd = new MySQLiteHelper(this.getContext());
-
-        List<Soiree> soirees = bdd.getAllSoirees();
-
+        orga = bdd.getUtilisateur(idorga);
         bdd.close();
 
+        TextView tv = (TextView) view.findViewById(R.id.textView25);
+        String nomprenom = orga.getPrenom()+" "+orga.getNom().toUpperCase();
+        tv.setText(nomprenom);
+
+        Button btn = (Button) view.findViewById(R.id.button24);
+        bdd = new MySQLiteHelper(this.getContext());
+        boolean estsuivi = bdd.estSuiviUser(iduser,idorga);
+        bdd.close();
+
+        if(estsuivi){
+            btn.setEnabled(false);
+            btn.setText("Vous suivez déjà l'organisateur");
+        }
+
+        bdd = new MySQLiteHelper(this.getContext());
+        List<Soiree> soirees = bdd.getSoireesOrga(idorga);
+        bdd.close();
 
         //Récupération de la listview créée dans le fichier main.xml
-        maListViewPerso = (ListView) view.findViewById(R.id.listView3);
+        maListViewPerso = (ListView) view.findViewById(R.id.listView4);
 
         //Création de la ArrayList qui nous permettra de remplire la listView
         ArrayList<HashMap<String, String>> listItem = new ArrayList<HashMap<String, String>>();
@@ -74,7 +104,7 @@ public class RechercheFragment extends Fragment {
         }
 
         //Création d'un SimpleAdapter qui se chargera de mettre les items présent dans notre list (listItem) dans la vue affichageitem
-        SimpleAdapter mSchedule = new SimpleAdapter (getContext(), listItem, R.xml.affichageitem,
+        SimpleAdapter mSchedule = new SimpleAdapter (this.getContext(), listItem, R.xml.affichageitem,
                 new String[] {"img", "titre", "description"}, new int[] {R.id.img, R.id.titre, R.id.description});
 
         //On attribut à notre listView l'adapter que l'on vient de créer
@@ -92,15 +122,48 @@ public class RechercheFragment extends Fragment {
                 //On affichage la soiree dans une nouvelle activité
                 Intent da = new Intent();
                 da.setClass(v.getContext(), AffichageSoireeOrganisateur.class);
-                da.putExtra("id",String.valueOf(map.get("id")));
+                da.putExtra("id", String.valueOf(map.get("id")));
                 startActivity(da);
             }
         });
 
+        //Remplir la barre de notation (étoiles)
+        RatingBar rb = (RatingBar) view.findViewById(R.id.ratingBar2);
+        rb.setIsIndicator(true);
+        bdd = new MySQLiteHelper(this.getContext());
+        float nota = bdd.getNotation(idorga);
+        bdd.close();
+        rb.setRating(nota);
 
-        // Inflate the layout for this fragment
+        //Ajout du listener sur le rating barre de notation par l'user courant
+        addListenerOnRatingBar();
+
         return view;
-
     }
 
+    public void onClickSuivreOrga(View view){
+        MySQLiteHelper bdd = new MySQLiteHelper(this.getContext());
+        bdd.ajouterUtilisateurSuivi(iduser, idorga);
+        bdd.close();
+        Toast.makeText(getActivity(), "Organisateur bien suivi", Toast.LENGTH_SHORT).show();
+        Button btn = (Button) view.findViewById(R.id.button24);
+        btn.setEnabled(false);
+        btn.setText("Vous suivez déjà l'organisateur");
+    }
+
+    public void addListenerOnRatingBar() {
+
+        RatingBar  rb = (RatingBar) view.findViewById(R.id.ratingBar3);
+
+        //if rating value is changed,
+        //display the current rating value in the result (textview) automatically
+        rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                MySQLiteHelper bdd = new MySQLiteHelper(getContext());
+                bdd.setNotation(iduser,idorga,rating);
+                bdd.close();
+                Toast.makeText(getActivity(), "Notation enregistrée", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

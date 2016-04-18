@@ -30,14 +30,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".AffichageSoiree" />
-        <activity android:name=".AdminActivity" />
         <activity android:name=".AffichageUtilisateur" />
-        <activity android:name=".mainTest" />
-        <activity android:name=".userProfil" />
-        <activity android:name=".options" />
-        <activity android:name=".recherche" />
         <activity
             android:name=".TestAffichageSoiree"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AffichageSoireeOrganisateur"
+            android:label="@string/title_activity_affichage_soiree_organisateur"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

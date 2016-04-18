@@ -267,6 +267,22 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return soirees;
     }
 
+    //Retourne l'ID de l'organisateur pour une soirée donnée
+    public int getOrgaIDSoiree(int id){
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        Cursor cursor = db.query(TABLE_SOIREES, new String[]{"organisateur"}, "id = ?", new String[]{String.valueOf(id)}, null, null, null, null);
+
+        // 3. if we got results get the first one
+        if (cursor != null) {
+            cursor.moveToFirst();
+            return cursor.getInt(0);
+        }
+        else return 1;
+    }
+
 
     //*************************
     //METHODES POUR LES UTILISATEURS
@@ -388,9 +404,12 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Log.d("deleteSoiree", utilisateur.toString());
     }
 
+
+
     //********************************
     //METHODES POUR EVENEMENTS SUIVIS
     //********************************
+    //Ajouter un évènement suivi pour un utilisateur donné
     public void ajouterEvenementSuivi(int iduser, int idevent){
         //for logging
         Log.d("ajouterEvenementSuivi", iduser+" "+idevent);
@@ -411,6 +430,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    //Supprimer un évènement suivi pour un utilisateur donné
+    public void supprimerEvenementSuivi(int iduser, int idevent){
+        //for logging
+        Log.d("supprimerEvenementSuivi", iduser+" "+idevent);
+
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_MYFOLLEWEVENT, "iduser = ? AND idevent = ?", new String[]{String.valueOf(iduser),String.valueOf(idevent)});
+
+        // 3. close
+        db.close();
+    }
+
     public boolean estSuiviEvent(int iduser, int idevent){
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
@@ -423,6 +457,47 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             return true;
         }
         return false;
+    }
+
+    //Retourne les soirées auxquelles un utilisateur est inscrit pour un id d'utilisateur donné
+    public List<Soiree> getSoireesSuivies(int id){
+        List<Soiree> soirees = new LinkedList<>();
+
+        // 1. build the query
+        String query = "SELECT * FROM "+TABLE_MYFOLLEWEVENT+" WHERE iduser="+id;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Soiree soiree = null;
+        if(cursor.moveToFirst()){
+            do{
+                soiree = new Soiree();
+                Cursor cursor2 = db.rawQuery("SELECT * FROM "+TABLE_SOIREES+" WHERE id="+cursor.getInt(1),null);
+                cursor2.moveToFirst();
+                soiree.setId(Integer.parseInt(cursor2.getString(0)));
+                soiree.setTitre(cursor2.getString(1));
+                soiree.setDescription(cursor2.getString(2));
+                soiree.setPrix(Double.parseDouble(cursor2.getString(3)));
+                soiree.setCurrency(cursor2.getString(4));
+                soiree.setJour(Integer.parseInt(cursor2.getString(5)));
+                soiree.setMois(Integer.parseInt(cursor2.getString(6)));
+                soiree.setAnnee(Integer.parseInt(cursor2.getString(7)));
+                soiree.setHeures(Integer.parseInt(cursor2.getString(8)));
+                soiree.setMinutes(Integer.parseInt(cursor2.getString(9)));
+                soiree.setCoordonnees(cursor2.getString(10));
+                soiree.setOrganisateur(Integer.parseInt(cursor2.getString(11)));
+
+                soirees.add(soiree);
+            }while(cursor.moveToNext());
+        }
+
+        Log.d("getSoireesSuivies(" + id + ")", soirees.toString());
+
+        // 4. return soirees
+        return soirees;
     }
 
     //********************************
@@ -522,7 +597,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //SQL statement to create user table
-        String CREATE_USER_TABLE = "CREATE TABLE utilisateurs ("+
+        String CREATE_USER_TABLE = "CREATE TABLE "+TABLE_USERS+" ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 "login TEXT NOT NULL,"+
                 "password TEXT NOT NULL,"+
@@ -531,7 +606,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "prenom TEXT NOT NULL);";
 
         //SQL statement to create soiree table
-        String CREATE_SOIREE_TABLE = "CREATE TABLE soirees ("+
+        String CREATE_SOIREE_TABLE = "CREATE TABLE "+TABLE_SOIREES+" ("+
                 "id INTEGER PRIMARY KEY AUTOINCREMENT,"+
                 "titre TEXT NOT NULL,"+
                 "description TEXT NOT NULL,"+
@@ -546,19 +621,19 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "organisateur INTEGER NOT NULL);";
 
         //SQL statement to create user's created events
-        String CREATE_MYCREATEEVENT_TABLE = "CREATE TABLE mycreatedevent ("+
+        String CREATE_MYCREATEEVENT_TABLE = "CREATE TABLE "+TABLE_MYCREATEDEVENT+" ("+
                 "iduser INTEGER NOT NULL, idevent INTEGER NOT NULL);";
 
         //SQL statement to create user's followed events
-        String CREATE_MYFOLLOWEVENT_TABLE = "CREATE TABLE myfollowevent ("+
+        String CREATE_MYFOLLOWEVENT_TABLE = "CREATE TABLE "+TABLE_MYFOLLEWEVENT+" ("+
                 "iduser INTEGER NOT NULL, idevent INTEGER NOT NULL);";
 
         //SQL statement to create user's followed users
-        String CREATE_MYFOLLOWUSER_TABLE = "CREATE TABLE myfollowuser ("+
+        String CREATE_MYFOLLOWUSER_TABLE = "CREATE TABLE "+TABLE_MYFOLLOWUSER+" ("+
                 "idusersuiveur INTEGER NOT NULL, idusersuivi INTEGER NOT NULL);";
 
         //SQL statement to create user's notation
-        String CREATE_USERNOTATION_TABLE = "CREATE TABLE usernotation ("+
+        String CREATE_USERNOTATION_TABLE = "CREATE TABLE "+TABLE_USERNOTATION+" ("+
                 "idusernoteur INTEGER NOT NULL, idusernote INTEGER NOT NULL, note FLOAT NOT NULL);";
 
 
