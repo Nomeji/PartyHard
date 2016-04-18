@@ -74,28 +74,20 @@ public class AffichageSoireeFragment extends Fragment {
 
 
         boolean afficheBoutonSuivi = bddd.estSuiviEvent(MainApplicationVariables.getUserID(), soiree.getId());
+        bdd.close();
         if (afficheBoutonSuivi){
             Button btn = (Button) view.findViewById(R.id.button27);
-            btn.setEnabled(false);
-            btn.setText("Vous êtes déjà inscrit");
+            btn.setText("Se désinscrire");
+            btn.setOnClickListener(new listenerDesincrire());
+        }
+        else{
+            Button btn = (Button) view.findViewById(R.id.button27);
+            btn.setText("S'inscrire");
+            btn.setOnClickListener(new listenerInscrire());
         }
 
         //Ajout des listeners aux boutons
         Button b;
-        b = (Button) view.findViewById(R.id.button27);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MySQLiteHelper bdd = new MySQLiteHelper(getContext());
-                bdd.ajouterEvenementSuivi(MainApplicationVariables.getUserID(), soiree.getId());
-                bdd.close();
-                Toast.makeText(getActivity(), "Inscription confirmée", Toast.LENGTH_SHORT).show();
-                Button btn = (Button) v.findViewById(R.id.button27);
-                btn.setEnabled(false);
-                btn.setText("Vous êtes déjà inscrit");
-            }
-        });
-
         b = (Button) view.findViewById(R.id.button25);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,6 +130,40 @@ public class AffichageSoireeFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private class listenerInscrire implements View.OnClickListener {
+
+        public listenerInscrire(){
+        }
+
+        @Override
+        public void onClick(View v) {
+            MySQLiteHelper bdd = new MySQLiteHelper(getContext());
+            bdd.ajouterEvenementSuivi(MainApplicationVariables.getUserID(), soiree.getId());
+            bdd.close();
+            Toast.makeText(getActivity(), "Inscription confirmée", Toast.LENGTH_SHORT).show();
+            Button btn = (Button) v.findViewById(R.id.button27);
+            btn.setText("Se désinscrire");
+            btn.setOnClickListener(new listenerDesincrire());
+        }
+    }
+
+    private class listenerDesincrire implements View.OnClickListener{
+
+        public listenerDesincrire(){
+        }
+
+        @Override
+        public void onClick(View v) {
+            MySQLiteHelper bdd = new MySQLiteHelper(getContext());
+            bdd.supprimerEvenementSuivi(MainApplicationVariables.getUserID(), soiree.getId());
+            bdd.close();
+            Toast.makeText(getActivity(), "Désinscription confirmée", Toast.LENGTH_SHORT).show();
+            Button btn = (Button) v.findViewById(R.id.button27);
+            btn.setText("S'inscrire");
+            btn.setOnClickListener(new listenerInscrire());
+        }
     }
 
 }

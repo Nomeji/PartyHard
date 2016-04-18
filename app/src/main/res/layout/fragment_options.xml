@@ -9,8 +9,9 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center" >
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:layout_marginBottom="40dp">
 
         <Button
             android:layout_width="fill_parent"
