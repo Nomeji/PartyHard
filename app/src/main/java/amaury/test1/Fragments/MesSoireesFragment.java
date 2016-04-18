@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
@@ -16,40 +17,52 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import amaury.test1.AffichageSoiree;
 import amaury.test1.AffichageSoireeOrganisateur;
+import amaury.test1.MainApplicationVariables;
 import amaury.test1.MySQLiteHelper;
 import amaury.test1.R;
 import amaury.test1.Soiree;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RechercheFragment extends Fragment {
+public class MesSoireesFragment extends Fragment {
 
-    private ListView maListViewPerso;
 
-    public RechercheFragment() {
+    public MesSoireesFragment() {
         // Required empty public constructor
     }
 
 
+    ListView maListViewPerso;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        View view = inflater.inflate(R.layout.fragment_recherche, container, false);
-
-        MySQLiteHelper bdd = new MySQLiteHelper(this.getContext());
-
-        List<Soiree> soirees = bdd.getAllSoirees();
-
-        bdd.close();
-
+        // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_mes_soirees, container, false);
 
         //Récupération de la listview créée dans le fichier main.xml
-        maListViewPerso = (ListView) view.findViewById(R.id.listView3);
+        maListViewPerso = (ListView) view.findViewById(R.id.listView5);
+
+        remplissageListView();
+
+        Button b = (Button) view.findViewById(R.id.button28);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remplissageListView();
+            }
+        });
+
+        return view;
+    }
+
+    public void remplissageListView(){
+        MySQLiteHelper bdd = new MySQLiteHelper(this.getContext());
+        List<Soiree> soirees = bdd.getSoireesSuivies(MainApplicationVariables.getUserID());
+        bdd.close();
 
         //Création de la ArrayList qui nous permettra de remplire la listView
         ArrayList<HashMap<String, String>> listItem = new ArrayList<HashMap<String, String>>();
@@ -74,7 +87,7 @@ public class RechercheFragment extends Fragment {
         }
 
         //Création d'un SimpleAdapter qui se chargera de mettre les items présent dans notre list (listItem) dans la vue affichageitem
-        SimpleAdapter mSchedule = new SimpleAdapter (getContext(), listItem, R.xml.affichageitem,
+        SimpleAdapter mSchedule = new SimpleAdapter (this.getContext(), listItem, R.xml.affichageitem,
                 new String[] {"img", "titre", "description"}, new int[] {R.id.img, R.id.titre, R.id.description});
 
         //On attribut à notre listView l'adapter que l'on vient de créer
@@ -92,15 +105,10 @@ public class RechercheFragment extends Fragment {
                 //On affichage la soiree dans une nouvelle activité
                 Intent da = new Intent();
                 da.setClass(v.getContext(), AffichageSoireeOrganisateur.class);
-                da.putExtra("id",String.valueOf(map.get("id")));
+                da.putExtra("id", String.valueOf(map.get("id")));
                 startActivity(da);
             }
         });
-
-
-        // Inflate the layout for this fragment
-        return view;
-
     }
 
 }

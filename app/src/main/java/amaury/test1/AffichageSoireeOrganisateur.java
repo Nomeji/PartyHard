@@ -1,6 +1,8 @@
 package amaury.test1;
 
 import android.support.design.widget.TabLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -15,11 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import amaury.test1.Fragments.OptionsFragment;
-import amaury.test1.Fragments.RechercheFragment;
-import amaury.test1.Fragments.MesSoireesFragment;
+import amaury.test1.Fragments.*;
 
-public class TestAffichageSoiree extends AppCompatActivity {
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class AffichageSoireeOrganisateur extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -34,12 +37,22 @@ public class TestAffichageSoiree extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
+
+    private int ID;
+    private int IDorga;
+
     private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_affichage_soiree);
+        setContentView(R.layout.activity_affichage_soiree_organisateur);
+
+        //On récupère l'ID de la soirée
+        ID = Integer.parseInt(getIntent().getStringExtra("id"));
+        MySQLiteHelper bdd = new MySQLiteHelper(this);
+        IDorga = bdd.getOrgaIDSoiree(ID);
+        bdd.close();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -54,13 +67,14 @@ public class TestAffichageSoiree extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_test_affichage_soiree, menu);
+        getMenuInflater().inflate(R.menu.menu_affichage_soiree_organisateur, menu);
         return true;
     }
 
@@ -107,7 +121,7 @@ public class TestAffichageSoiree extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_test_affichage_soiree, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_affichage_soiree_organisateur, container, false);
             return rootView;
         }
     }
@@ -126,30 +140,35 @@ public class TestAffichageSoiree extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if(position==0)
-                return new RechercheFragment();
-            if(position==1)
-                return new MesSoireesFragment();
-            if(position==2)
-                return new OptionsFragment();
-            return PlaceholderFragment.newInstance(position + 1);
+            if (position==0) {
+                AffichageSoireeFragment asf = new AffichageSoireeFragment();
+                Bundle args = new Bundle();
+                args.putInt("id", ID);
+                asf.setArguments(args);
+                return asf;
+            }
+            else {
+                AffichageOrganisateurFragment aof = new AffichageOrganisateurFragment();
+                Bundle args = new Bundle();
+                args.putInt("idorga", IDorga);
+                aof.setArguments(args);
+                return aof;
+            }
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Recherche";
+                    return "Soirée";
                 case 1:
-                    return "Mes Soirées";
-                case 2:
-                    return "Mon Profil";
+                    return "Organisateur";
             }
             return null;
         }

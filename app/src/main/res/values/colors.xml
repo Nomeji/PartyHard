@@ -6,4 +6,5 @@
     <color name="blanc">#FFFFFF</color>
     <color name="vert">#00FF00</color>
     <color name="jaune">#FFFF00</color>
+    <color name="rouge">#FF0000</color>
 </resources>

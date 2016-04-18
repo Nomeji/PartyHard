@@ -84,7 +84,7 @@ public class AffichageSoiree extends AppCompatActivity {
         }
         catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(AffichageSoiree.this,
-                    "SMS faild, please try again later.", Toast.LENGTH_SHORT).show();
+                    "SMS failed, please try again later.", Toast.LENGTH_SHORT).show();
         }
     }
 
