@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -283,6 +284,61 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         else return 1;
     }
 
+    //Retourne les soirées en fonction des filtres
+    public List<Soiree> getAllSoireesFiltres(int prix, int jourdeb, int moisdeb, int anneedeb, int jourfin, int moisfin, int anneefin, int heure, int minute){
+        List<Soiree> soirees = new LinkedList<>();
+
+
+        //On récupère les filtres et on crée la requête en fonction
+        String requeteFiltres =" WHERE";
+        if(prix!=-1)
+            requeteFiltres+=" prix="+prix;
+        else
+            requeteFiltres+=" prix>=0";
+        if(jourdeb!=-1)
+            requeteFiltres+=" AND jour>="+jourdeb+" AND mois>="+moisdeb+" AND annee>="+anneedeb;
+        if(jourfin!=-1)
+            requeteFiltres+=" AND jour<="+jourfin+" AND mois<="+moisfin+" AND annee<="+anneefin;
+        if(heure!=-1)
+            requeteFiltres+=" AND heures>="+heure+" AND minutes>="+minute;
+        if(requeteFiltres.equals(" WHERE"))
+            requeteFiltres="";
+
+        // 1. build the query
+        String query = "SELECT * FROM "+TABLE_SOIREES+requeteFiltres;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        Soiree soiree = null;
+        if(cursor.moveToFirst()){
+            do{
+                soiree = new Soiree();
+                soiree.setId(Integer.parseInt(cursor.getString(0)));
+                soiree.setTitre(cursor.getString(1));
+                soiree.setDescription(cursor.getString(2));
+                soiree.setPrix(Double.parseDouble(cursor.getString(3)));
+                soiree.setCurrency(cursor.getString(4));
+                soiree.setJour(Integer.parseInt(cursor.getString(5)));
+                soiree.setMois(Integer.parseInt(cursor.getString(6)));
+                soiree.setAnnee(Integer.parseInt(cursor.getString(7)));
+                soiree.setHeures(Integer.parseInt(cursor.getString(8)));
+                soiree.setMinutes(Integer.parseInt(cursor.getString(9)));
+                soiree.setCoordonnees(cursor.getString(10));
+                soiree.setOrganisateur(Integer.parseInt(cursor.getString(11)));
+
+                soirees.add(soiree);
+            }while(cursor.moveToNext());
+        }
+
+        Log.d("getAllSoirees()", soirees.toString());
+
+        // 4. return soirees
+        return soirees;
+    }
+
 
     //*************************
     //METHODES POUR LES UTILISATEURS
@@ -439,7 +495,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. delete
-        db.delete(TABLE_MYFOLLEWEVENT, "iduser = ? AND idevent = ?", new String[]{String.valueOf(iduser),String.valueOf(idevent)});
+        db.delete(TABLE_MYFOLLEWEVENT, "iduser = ? AND idevent = ?", new String[]{String.valueOf(iduser), String.valueOf(idevent)});
 
         // 3. close
         db.close();
@@ -498,6 +554,51 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 4. return soirees
         return soirees;
+    }
+
+    //Retourne le nombre de soirées auxquelles un utilisateur est inscrit
+    public int nbSoireesSuivies(int id){
+        int nb=0;
+        // 1. build the query
+        String query = "SELECT COUNT(*) FROM "+TABLE_MYFOLLEWEVENT+" WHERE iduser="+id;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        if(cursor.moveToFirst())
+            nb = cursor.getInt(0);
+
+        Log.d("nbSoireesSuivies(" + id + ")", String.valueOf(nb));
+
+        // 4. return soirees
+        return nb;
+    }
+
+    //Retourne le nombre de soirées que l'utilisateur a aujourd'hui
+    //Retourne les soirées auxquelles un utilisateur est inscrit pour un id d'utilisateur donné
+    public int nbSoireesSuiviesAujourdhui(int id){
+        int nb=0;
+        // 1. build the query
+        int annee,jour,mois;
+        annee = Calendar.YEAR;
+        jour = Calendar.DAY_OF_MONTH;
+        mois = Calendar.MONTH;
+        String query = "SELECT COUNT(*) FROM "+TABLE_MYFOLLEWEVENT+", "+TABLE_SOIREES+" WHERE iduser="+id+" AND jour="+jour+" AND mois="+mois+" AND annee="+annee+";";
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        if(cursor.moveToFirst())
+            nb = cursor.getInt(0);
+
+        Log.d("nbSoireesSuiviesAuj(" + id + ")", String.valueOf(nb));
+
+        // 4. return soirees
+        return nb;
     }
 
     //********************************

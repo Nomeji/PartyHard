@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -36,12 +37,13 @@ public class MesSoireesFragment extends Fragment {
 
 
     ListView maListViewPerso;
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_mes_soirees, container, false);
+        view =  inflater.inflate(R.layout.fragment_mes_soirees, container, false);
 
         //Récupération de la listview créée dans le fichier main.xml
         maListViewPerso = (ListView) view.findViewById(R.id.listView5);
@@ -55,6 +57,9 @@ public class MesSoireesFragment extends Fragment {
                 remplissageListView();
             }
         });
+
+
+        setTextNbSoirees();
 
         return view;
     }
@@ -109,6 +114,21 @@ public class MesSoireesFragment extends Fragment {
                 startActivity(da);
             }
         });
+
+        setTextNbSoirees();
+    }
+
+    public void setTextNbSoirees(){
+        MySQLiteHelper bdd = new MySQLiteHelper(getContext());
+        int nbsoiree = bdd.nbSoireesSuivies(MainApplicationVariables.getUserID());
+        int nbsoireeaujourdhui = bdd.nbSoireesSuiviesAujourdhui(MainApplicationVariables.getUserID());
+        bdd.close();
+
+        TextView t = (TextView) view.findViewById(R.id.textView29);
+        t.setText(String.valueOf(nbsoiree));
+
+        t = (TextView) view.findViewById(R.id.textView32);
+        t.setText(String.valueOf(nbsoireeaujourdhui));
     }
 
 }

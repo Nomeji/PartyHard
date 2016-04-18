@@ -1,6 +1,10 @@
 package amaury.test1.Fragments;
 
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,11 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,6 +38,12 @@ import amaury.test1.Soiree;
 public class RechercheFragment extends Fragment {
 
     private ListView maListViewPerso;
+    private View view;
+    //Variables des filtres
+    private int prix=-1;
+    private int heure=-1, minute=-1;
+    private int jourdeb=-1, moisdeb=-1, anneedeb=-1;
+    private int jourfin=-1, moisfin=-1, anneefin=-1;
 
     public RechercheFragment() {
         // Required empty public constructor
@@ -39,7 +55,7 @@ public class RechercheFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        View view = inflater.inflate(R.layout.fragment_recherche, container, false);
+        view = inflater.inflate(R.layout.fragment_recherche, container, false);
 
         MySQLiteHelper bdd = new MySQLiteHelper(this.getContext());
 
@@ -47,7 +63,52 @@ public class RechercheFragment extends Fragment {
 
         bdd.close();
 
+        remplirListView(soirees);
 
+
+        //Ajout des listeners aux boutons
+        Button b = (Button) view.findViewById(R.id.button21);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenerFiltres();
+            }
+        });
+
+
+        // Inflate the layout for this fragment
+        return view;
+
+    }
+
+    public void listenerFiltres(){
+        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(view.getContext());
+        helpBuilder.setTitle("Filtres");
+
+        LayoutInflater inflater = getLayoutInflater(Bundle.EMPTY);
+        final View checkboxLayout = inflater.inflate(R.layout.popup_filtre_layout, null);
+        helpBuilder.setView(checkboxLayout);
+
+        helpBuilder.setPositiveButton("Ok",
+        new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                CheckBox cb = (CheckBox) checkboxLayout.findViewById(R.id.checkboxTest1);
+                boolean gratuit = cb.isChecked();
+                if(gratuit)
+                    prix =0;
+                else
+                    prix = -1;
+                majFiltresRecherche();
+            }
+        });
+
+        // Remember, create doesn't show the dialog
+        AlertDialog helpDialog = helpBuilder.create();
+        helpDialog.show();
+    }
+
+    public void remplirListView(List<Soiree> soirees){
         //Récupération de la listview créée dans le fichier main.xml
         maListViewPerso = (ListView) view.findViewById(R.id.listView3);
 
@@ -96,11 +157,14 @@ public class RechercheFragment extends Fragment {
                 startActivity(da);
             }
         });
+    }
 
-
-        // Inflate the layout for this fragment
-        return view;
-
+    public void majFiltresRecherche(){
+        MySQLiteHelper bdd = new MySQLiteHelper(view.getContext());
+        List<Soiree> liste = bdd.getAllSoireesFiltres(prix,jourdeb,moisdeb,anneedeb,jourfin,moisfin,anneefin,heure,minute);
+        bdd.close();
+        remplirListView(liste);
+        Toast.makeText(getActivity(), "Liste mise à jour", Toast.LENGTH_SHORT).show();
     }
 
 }
