@@ -268,6 +268,24 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return soirees;
     }
 
+    //Retourne le nombre de soirées créées par un utilisateur
+    public int getNbSoireesOrga(int id){
+        int nb = 0;
+        // 1. build the query
+        String query = "SELECT COUNT(*) FROM "+TABLE_SOIREES+" WHERE organisateur="+id;
+
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // 3. go over each row, build book and add it to list
+        cursor.moveToFirst();
+        nb = cursor.getInt(0);
+
+        // 4. return soirees
+        return nb;
+    }
+
     //Retourne l'ID de l'organisateur pour une soirée donnée
     public int getOrgaIDSoiree(int id){
         // 1. get reference to readable DB
@@ -624,6 +642,18 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    //Ne plus suivre un utilisateur/organisateur pour un utilisateur donné
+    public void supprimerUtilisateurSuivi(int idsuiveur, int idsuivi){
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_MYFOLLOWUSER, "idusersuiveur = ? AND idusersuivi = ?", new String[]{String.valueOf(idsuiveur), String.valueOf(idsuivi)});
+
+        // 3. close
+        db.close();
+    }
+
     public boolean estSuiviUser(int idsuiveur, int idsuivi){
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
@@ -636,6 +666,24 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             return true;
         }
         return false;
+    }
+
+    //Retourne le nombre total d'abonnés pour un utilisateur donné
+    public int getNbAbonnes(int id){
+        int nb = 0;
+
+        // 1. get reference to readable DB
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 2. build query
+        String query = "SELECT COUNT(*) FROM "+TABLE_MYFOLLOWUSER+" WHERE idusersuivi="+id+";";
+        Cursor cursor = db.rawQuery(query,null);
+
+        // 3. if we got results get the first one
+        cursor.moveToFirst();
+        nb = cursor.getInt(0);
+
+        return nb;
     }
 
     //********************************

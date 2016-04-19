@@ -16,7 +16,7 @@
         android:label="PartyHard"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Accueil" />
+        <activity android:name=".AccueilOBSOLETE" />
         <activity
             android:name=".VueOptions"
             android:label="@string/title_activity_vue_options" />
@@ -32,7 +32,7 @@
         <activity android:name=".AffichageSoiree" />
         <activity android:name=".AffichageUtilisateur" />
         <activity
-            android:name=".TestAffichageSoiree"
+            android:name=".Accueil"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AffichageSoireeOrganisateur"

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -31,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, stemp, Toast.LENGTH_SHORT).show();
             MainApplicationVariables.setUserID(tempid);
             Intent da = new Intent();
-            da.setClass(this, Accueil.class);
+            da.setClass(this, AccueilOBSOLETE.class);
             startActivity(da);
         }
         else{
