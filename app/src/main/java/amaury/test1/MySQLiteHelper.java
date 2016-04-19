@@ -282,7 +282,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //Retourne les soirées en fonction des filtres
-    public List<Soiree> getAllSoireesFiltres(int prix, int jourdeb, int moisdeb, int anneedeb, int jourfin, int moisfin, int anneefin, int heure, int minute){
+    public List<Soiree> getAllSoireesFiltres(int prix, int jourdeb, int moisdeb, int anneedeb, int jourfin, int moisfin, int anneefin, int heure, int minute, int classement){
         List<Soiree> soirees = new LinkedList<>();
 
 
@@ -301,8 +301,20 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         if(requeteFiltres.equals(" WHERE"))
             requeteFiltres="";
 
+        String classage = " ORDER BY ";
+        switch (classement){
+            case 0:classage+="annee, mois, jour, heures, minutes";break;
+            case 1:classage+="annee DESC, mois DESC, jour DESC, heures DESC, minutes DESC";break;
+            case 2:classage="";break;
+            case 3:classage+="prix, annee, mois, jour, heures, minutes";break;
+            case 4:classage+="prix DESC, annee, mois, jour, heures, minutes";break;
+            case 5:classage+="titre, annee, mois, jour, heures, minutes";break;
+            case 6:classage+="titre DESC, annee, mois, jour, heures, minutes";break;
+            default:classage="";break;
+        }
+
         // 1. build the query
-        String query = "SELECT * FROM "+TABLE_SOIREES+requeteFiltres;
+        String query = "SELECT * FROM "+TABLE_SOIREES+requeteFiltres+classage+";";
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();

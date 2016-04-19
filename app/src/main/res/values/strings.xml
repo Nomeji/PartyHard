@@ -82,7 +82,16 @@
         <item>$</item>
     </string-array>
 
-    //A remplacer pas un DatePicker
+    <string-array name="orderby_arrays">
+        <item>Date</item>
+        <item>Date Dec</item>
+        <item>Popularité</item>
+        <item>Prix</item>
+        <item>Prix Dec</item>
+        <item>Nom</item>
+        <item>Nom Dec</item>
+    </string-array>
+
     <string-array name="jour_arrays">
         <item>1</item>
         <item>2</item>

@@ -63,7 +63,8 @@
                     <Spinner
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spinner2" />
+                        android:id="@+id/spinner2"
+                        android:entries="@array/orderby_arrays" />
                 </LinearLayout>
             </LinearLayout>
 
