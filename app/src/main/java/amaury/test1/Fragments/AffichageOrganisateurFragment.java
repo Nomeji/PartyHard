@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
@@ -76,6 +77,12 @@ public class AffichageOrganisateurFragment extends Fragment {
         else{
             btn.setText("Suivre l'organisateur");
             btn.setOnClickListener(new listenerInscrire());
+        }
+
+        //Affiche ou non le bouton suivre en fonction de l'user
+        if(idorga==iduser){
+            LinearLayout l = (LinearLayout) view.findViewById(R.id.linearLayoutbtnSuivreOrga);
+            l.removeAllViews();
         }
 
         //Remplir la liste des soirées

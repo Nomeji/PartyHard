@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class RechercheFragment extends Fragment {
     private int heure=-1, minute=-1;
     private int jourdeb=-1, moisdeb=-1, anneedeb=-1;
     private int jourfin=-1, moisfin=-1, anneefin=-1;
+    private int classement=0; //La position dans la liste d'items des classements, commence à 0
 
     public RechercheFragment() {
         // Required empty public constructor
@@ -72,6 +74,21 @@ public class RechercheFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 listenerFiltres();
+            }
+        });
+
+        //Ajout listener spinner classement
+        Spinner s = (Spinner) view.findViewById(R.id.spinner2);
+        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                classement = position;
+                majFiltresRecherche();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -161,7 +178,7 @@ public class RechercheFragment extends Fragment {
 
     public void majFiltresRecherche(){
         MySQLiteHelper bdd = new MySQLiteHelper(view.getContext());
-        List<Soiree> liste = bdd.getAllSoireesFiltres(prix,jourdeb,moisdeb,anneedeb,jourfin,moisfin,anneefin,heure,minute);
+        List<Soiree> liste = bdd.getAllSoireesFiltres(prix,jourdeb,moisdeb,anneedeb,jourfin,moisfin,anneefin,heure,minute,classement);
         bdd.close();
         remplirListView(liste);
         Toast.makeText(getActivity(), "Liste mise à jour", Toast.LENGTH_SHORT).show();
