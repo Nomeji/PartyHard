@@ -12,4 +12,6 @@
     <color name="black">#df0d0c</color>
     <color name="primary_text_default_material_light">#deffffff</color>
     <color name="secondary_text_default_material_light">#8affffff</color>
+    <color name="secondary_text_default_material_dark">#b3444444</color>
+    <color name="primary_text_default_material_dark">#373737</color>
 </resources>

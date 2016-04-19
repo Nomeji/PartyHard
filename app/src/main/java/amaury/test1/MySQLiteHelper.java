@@ -146,7 +146,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         List<Soiree> soirees = new LinkedList<>();
 
         // 1. build the query
-        String query = "SELECT * FROM "+TABLE_SOIREES;
+        String query = "SELECT * FROM "+TABLE_SOIREES+" ORDER BY annee, mois, jour, heures, minutes;";
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -213,7 +213,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         List<Soiree> soirees = new LinkedList<>();
 
         // 1. build the query
-        String query = "SELECT * FROM "+TABLE_SOIREES+" WHERE organisateur="+id;
+        String query = "SELECT * FROM "+TABLE_SOIREES+" WHERE organisateur="+id+" ORDER BY annee, mois, jour, heures, minutes;";
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
