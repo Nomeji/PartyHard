@@ -70,14 +70,97 @@ public class AffichageOrganisateurFragment extends Fragment {
         bdd.close();
 
         if(estsuivi){
-            btn.setEnabled(false);
-            btn.setText("Vous suivez déjà l'organisateur");
+            btn.setText("Ne plus suivre");
+            btn.setOnClickListener(new listenerDesincrire());
+        }
+        else{
+            btn.setText("Suivre l'organisateur");
+            btn.setOnClickListener(new listenerInscrire());
         }
 
+        //Remplir la liste des soirées
         bdd = new MySQLiteHelper(this.getContext());
         List<Soiree> soirees = bdd.getSoireesOrga(idorga);
         bdd.close();
 
+        remplirListView(soirees);
+
+
+        //Remplir la barre de notation (étoiles)
+        RatingBar rb = (RatingBar) view.findViewById(R.id.ratingBar2);
+        bdd = new MySQLiteHelper(this.getContext());
+        float nota = bdd.getNotation(idorga);
+        bdd.close();
+        rb.setRating(nota);
+
+        //Ajout du listener sur le rating barre de notation par l'user courant
+        addListenerOnRatingBar();
+
+        //Remplir les infos nbsoirees et nborga
+        int nbsoiree, nborga;
+        bdd = new MySQLiteHelper(view.getContext());
+        nbsoiree = bdd.getNbSoireesOrga(idorga);
+        nborga = bdd.getNbAbonnes(idorga);
+        bdd.close();
+        TextView t = (TextView) view.findViewById(R.id.textView46);
+        t.setText(String.valueOf(nbsoiree));
+        t = (TextView) view.findViewById(R.id.textView47);
+        t.setText(String.valueOf(nborga));
+
+        return view;
+    }
+
+    public void addListenerOnRatingBar() {
+
+        RatingBar  rb = (RatingBar) view.findViewById(R.id.ratingBar2);
+
+        //if rating value is changed,
+        //display the current rating value in the result (textview) automatically
+        rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                MySQLiteHelper bdd = new MySQLiteHelper(getContext());
+                bdd.setNotation(iduser,idorga,rating);
+                bdd.close();
+                Toast.makeText(getActivity(), "Notation enregistrée", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private class listenerInscrire implements View.OnClickListener {
+
+        public listenerInscrire(){
+        }
+
+        @Override
+        public void onClick(View v) {
+            MySQLiteHelper bdd = new MySQLiteHelper(getContext());
+            bdd.ajouterUtilisateurSuivi(MainApplicationVariables.getUserID(), idorga);
+            bdd.close();
+            Toast.makeText(getActivity(), "Inscription confirmée", Toast.LENGTH_SHORT).show();
+            Button btn = (Button) v.findViewById(R.id.button24);
+            btn.setText("Ne plus suivre");
+            btn.setOnClickListener(new listenerDesincrire());
+        }
+    }
+
+    private class listenerDesincrire implements View.OnClickListener{
+
+        public listenerDesincrire(){
+        }
+
+        @Override
+        public void onClick(View v) {
+            MySQLiteHelper bdd = new MySQLiteHelper(getContext());
+            bdd.supprimerUtilisateurSuivi(MainApplicationVariables.getUserID(), idorga);
+            bdd.close();
+            Toast.makeText(getActivity(), "Désinscription confirmée", Toast.LENGTH_SHORT).show();
+            Button btn = (Button) v.findViewById(R.id.button24);
+            btn.setText("Suivre l'organisateur");
+            btn.setOnClickListener(new listenerInscrire());
+        }
+    }
+
+    public void remplirListView(List<Soiree> soirees){
         //Récupération de la listview créée dans le fichier main.xml
         maListViewPerso = (ListView) view.findViewById(R.id.listView4);
 
@@ -104,7 +187,7 @@ public class AffichageOrganisateurFragment extends Fragment {
         }
 
         //Création d'un SimpleAdapter qui se chargera de mettre les items présent dans notre list (listItem) dans la vue affichageitem
-        SimpleAdapter mSchedule = new SimpleAdapter (this.getContext(), listItem, R.xml.affichageitem,
+        SimpleAdapter mSchedule = new SimpleAdapter (getContext(), listItem, R.xml.affichageitem,
                 new String[] {"img", "titre", "description"}, new int[] {R.id.img, R.id.titre, R.id.description});
 
         //On attribut à notre listView l'adapter que l'on vient de créer
@@ -122,47 +205,8 @@ public class AffichageOrganisateurFragment extends Fragment {
                 //On affichage la soiree dans une nouvelle activité
                 Intent da = new Intent();
                 da.setClass(v.getContext(), AffichageSoireeOrganisateur.class);
-                da.putExtra("id", String.valueOf(map.get("id")));
+                da.putExtra("id",String.valueOf(map.get("id")));
                 startActivity(da);
-            }
-        });
-
-        //Remplir la barre de notation (étoiles)
-        RatingBar rb = (RatingBar) view.findViewById(R.id.ratingBar2);
-        rb.setIsIndicator(true);
-        bdd = new MySQLiteHelper(this.getContext());
-        float nota = bdd.getNotation(idorga);
-        bdd.close();
-        rb.setRating(nota);
-
-        //Ajout du listener sur le rating barre de notation par l'user courant
-        addListenerOnRatingBar();
-
-        return view;
-    }
-
-    public void onClickSuivreOrga(View view){
-        MySQLiteHelper bdd = new MySQLiteHelper(this.getContext());
-        bdd.ajouterUtilisateurSuivi(iduser, idorga);
-        bdd.close();
-        Toast.makeText(getActivity(), "Organisateur bien suivi", Toast.LENGTH_SHORT).show();
-        Button btn = (Button) view.findViewById(R.id.button24);
-        btn.setEnabled(false);
-        btn.setText("Vous suivez déjà l'organisateur");
-    }
-
-    public void addListenerOnRatingBar() {
-
-        RatingBar  rb = (RatingBar) view.findViewById(R.id.ratingBar3);
-
-        //if rating value is changed,
-        //display the current rating value in the result (textview) automatically
-        rb.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                MySQLiteHelper bdd = new MySQLiteHelper(getContext());
-                bdd.setNotation(iduser,idorga,rating);
-                bdd.close();
-                Toast.makeText(getActivity(), "Notation enregistrée", Toast.LENGTH_SHORT).show();
             }
         });
     }

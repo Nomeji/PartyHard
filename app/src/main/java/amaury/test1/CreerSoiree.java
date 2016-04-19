@@ -1,7 +1,6 @@
 package amaury.test1;
 
 import android.app.DatePickerDialog;
-import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -10,9 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -38,17 +35,9 @@ public class CreerSoiree extends AppCompatActivity {
         //Recupere le type d argent
         Spinner champCurr = (Spinner) findViewById(R.id.champCurrency);
         String curr = String.valueOf(champCurr.getSelectedItem());
-        //Recupere la date
-       /* EditText champDate = (EditText) findViewById(R.id.champDate);
-        String date = champDate.getText().toString();
-        //Recupere l heure
-        EditText champHeure = (EditText) findViewById(R.id.champHeure);
-        String heure = champHeure.getText().toString();*/
         //Recupere les coordonnees
         EditText champCoor = (EditText) findViewById(R.id.champCoordonnes);
         String coor = champCoor.getText().toString();
-
-        //Changer orga pour récupérer l'id de l'utilisateur
 
         int orga = MainApplicationVariables.getUserID();
 

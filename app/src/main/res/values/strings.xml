@@ -139,7 +139,9 @@
         <item>2017</item>
     </string-array>
     <string name="title_activity_test_affichage_soiree">TestAffichageSoiree</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_choix_langue">Choix Langue</string>
+    <string name="action_credits">Crédits</string>
+    <string name="action_decconexion">Déconnexion</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
