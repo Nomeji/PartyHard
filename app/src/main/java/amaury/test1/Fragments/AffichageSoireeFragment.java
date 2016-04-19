@@ -1,6 +1,8 @@
 package amaury.test1.Fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,12 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.GregorianCalendar;
 
+import amaury.test1.Accueil;
 import amaury.test1.MainApplicationVariables;
+import amaury.test1.ModifierSoiree;
 import amaury.test1.MySQLiteHelper;
 import amaury.test1.R;
 import amaury.test1.Soiree;
@@ -32,19 +38,25 @@ public class AffichageSoireeFragment extends Fragment {
 
 
     private Soiree soiree;
+    private int idorga;
+    private int iduser = MainApplicationVariables.getUserID();
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_affichage_soiree, container, false);
+        view = inflater.inflate(R.layout.fragment_affichage_soiree, container, false);
 
-        int ID = getArguments().getInt("id");
+        final int ID = getArguments().getInt("id");
 
         //On recherche la soirée dans la BDD
         MySQLiteHelper bdd = new MySQLiteHelper(getContext());
         soiree = bdd.getSoiree(ID);
+        idorga = bdd.getOrgaIDSoiree(soiree.getId());
         bdd.close();
+
+        iduser = MainApplicationVariables.getUserID();
 
         //On change les changes TextView pour correspondre aux données de la soirée
         TextView tv;
@@ -70,20 +82,78 @@ public class AffichageSoireeFragment extends Fragment {
         tv.setText(soiree.getCoordonnees());
 
 
+        //Configuration du bouton inscrire/désinscrire
         MySQLiteHelper bddd = new MySQLiteHelper(getContext());
-
-
         boolean afficheBoutonSuivi = bddd.estSuiviEvent(MainApplicationVariables.getUserID(), soiree.getId());
-        bdd.close();
-        if (afficheBoutonSuivi){
+        bddd.close();
+        if (afficheBoutonSuivi) {
             Button btn = (Button) view.findViewById(R.id.button27);
             btn.setText("Se désinscrire");
             btn.setOnClickListener(new listenerDesincrire());
-        }
-        else{
+        } else {
             Button btn = (Button) view.findViewById(R.id.button27);
             btn.setText("S'inscrire");
             btn.setOnClickListener(new listenerInscrire());
+        }
+
+
+        //On affiche soit le bouton inscription/desinscription ou bien modifier/supprimer
+        //En fonction de l'ID de l'utilisateur
+
+        //Cas 1 : si l'organisateur est l'utilisateur courant, afficher modifier/supprimer
+        if(idorga==iduser) {
+            LinearLayout l = (LinearLayout) view.findViewById(R.id.linearLayoutBtnInscrireModifier);
+            l.removeAllViews();
+            Button b = new Button(view.getContext());
+            b.setText("Modifier");
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(view.getContext(), ModifierSoiree.class);
+                    i.putExtra("id",String.valueOf(soiree.getId()));
+                    startActivity(i);
+                }
+            });
+            l.addView(b);
+            b = new Button(view.getContext());
+            b.setText("Supprimer");
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder helpBuilder = new AlertDialog.Builder(view.getContext());
+                    helpBuilder.setTitle("Filtres");
+                    helpBuilder.setMessage("Êtes-vous sûr de vouloir supprimer cette soirée ?");
+
+                    LayoutInflater inflater = getLayoutInflater(Bundle.EMPTY);
+                    final View checkboxLayout = inflater.inflate(R.layout.popup_vide, null);
+                    helpBuilder.setView(checkboxLayout);
+
+                    helpBuilder.setPositiveButton("Oui",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MySQLiteHelper bdd = new MySQLiteHelper(view.getContext());
+                                    bdd.supprimerSoiree(soiree.getId());
+                                    bdd.close();
+                                    Toast.makeText(getActivity(), "Soirée supprimée", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(view.getContext(), Accueil.class);
+                                    startActivity(i);
+                                }
+                            });
+
+                    helpBuilder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Ne fait rien
+                        }
+                    });
+
+                    // Remember, create doesn't show the dialog
+                    AlertDialog helpDialog = helpBuilder.create();
+                    helpDialog.show();
+                }
+            });
+            l.addView(b);
+
         }
 
         //Ajout des listeners aux boutons

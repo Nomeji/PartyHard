@@ -20,8 +20,8 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
@@ -176,25 +176,25 @@
                         android:layout_marginBottom="20dp" />
                 </LinearLayout>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="122dp">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/linearLayoutBtnInscrireModifier">
 
                     <Button
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:text="S&apos;inscrire"
                         android:id="@+id/button27"
-                        android:layout_alignParentBottom="true"
                         android:layout_alignLeft="@+id/textView23"
                         android:layout_alignStart="@+id/textView23"
                         android:layout_gravity="center"
-                        android:elegantTextHeight="false"
                         android:textSize="30dp"
                         android:background="#ff0000"
                         android:textStyle="bold"
                         android:textColor="#0022fc" />
-                </FrameLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:orientation="horizontal"

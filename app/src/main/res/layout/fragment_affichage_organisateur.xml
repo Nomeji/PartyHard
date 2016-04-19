@@ -127,7 +127,7 @@
             android:layout_below="@+id/textView26" />
 
         <ListView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/listView4"
             android:layout_below="@+id/textView27"

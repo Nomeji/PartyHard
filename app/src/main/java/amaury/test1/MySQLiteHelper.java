@@ -74,40 +74,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    //ADMIN
-    public void deleteBDD(){
-
-        this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS soirees");
-        this.getWritableDatabase().execSQL("DROP TABLE IF EXISTS utilisateurs");
-
-    }
-
-    public void createBDD(){
-        //Insérer des valeurs dans la BDD
-        String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','user1','user1');";
-        this.getWritableDatabase().execSQL(createUser);
-        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user2','user2','user2','user2','user2');";
-        this.getWritableDatabase().execSQL(createUser);
-        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user3','user3','user3','user3','user3');";
-        this.getWritableDatabase().execSQL(createUser);
-        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user4','user4','user4','user4','user4');";
-        this.getWritableDatabase().execSQL(createUser);
-
-        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
-        this.getWritableDatabase().execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',1);";
-        this.getWritableDatabase().execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
-        this.getWritableDatabase().execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',2);";
-        this.getWritableDatabase().execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
-        this.getWritableDatabase().execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Allez viens on est bien bien bien !', 15, '€', '12/04/2016', '22h30', 'Chez Francis',3);";
-        this.getWritableDatabase().execSQL(createSoiree);
-
-    }
-
     //*************************
     //METHODES POUR LES SOIREES
     //*************************
@@ -215,18 +181,31 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //Supprimer une soirée
-    public void deleteSoiree(Soiree soiree){
+    public void supprimerSoiree(int id){
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
 
         // 2. delete
-        db.delete(TABLE_SOIREES, KEY_ID + " = ?", new String[]{String.valueOf(soiree.getId())});
+        db.delete(TABLE_SOIREES, KEY_ID + " = ?", new String[]{String.valueOf(id)});
 
         // 3. close
         db.close();
 
         //log
-        Log.d("deleteSoiree", soiree.toString());
+        Log.d("deleteSoiree", String.valueOf(id));
+    }
+
+    //Modifie une soirée
+    public void modifierSoiree(Soiree soiree){
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //2.Query
+        String query = "UPDATE "+TABLE_SOIREES+" SET titre='"+soiree.getTitre()+"', description='"+soiree.getDescription()+"', prix="+soiree.getPrix()+", currency='"+soiree.getCurrency()+"', jour="+soiree.getJour()+", mois="+soiree.getMois()+", annee="+soiree.getAnnee()+", heures="+soiree.getHeures()+", minutes="+soiree.getMinutes()+", coordonnees='"+soiree.getCoordonnees()+"' WHERE id="+soiree.getId()+";";
+        db.execSQL(query);
+
+        // 3. close
+        db.close();
     }
 
     //Retourne la liste des soirées créées par un user donnée
@@ -600,18 +579,20 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         int nb=0;
         // 1. build the query
         int annee,jour,mois;
-        annee = Calendar.YEAR;
-        jour = Calendar.DAY_OF_MONTH;
-        mois = Calendar.MONTH;
-        String query = "SELECT COUNT(*) FROM "+TABLE_MYFOLLEWEVENT+", "+TABLE_SOIREES+" WHERE iduser="+id+" AND jour="+jour+" AND mois="+mois+" AND annee="+annee+";";
+
+        Calendar c = Calendar.getInstance();
+        annee = c.get(Calendar.YEAR);
+        jour = c.get(Calendar.DAY_OF_MONTH);
+        mois = c.get(Calendar.MONTH)+1;
+        String query = "SELECT COUNT(*) FROM "+TABLE_MYFOLLEWEVENT+" E,"+TABLE_SOIREES+" S WHERE S.id=E.idevent AND E.iduser="+id+" AND S.jour="+jour+" AND S.mois="+mois+" AND S.annee="+annee+";";
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build book and add it to list
-        if(cursor.moveToFirst())
-            nb = cursor.getInt(0);
+        cursor.moveToFirst();
+        nb = cursor.getInt(0);
 
         Log.d("nbSoireesSuiviesAuj(" + id + ")", String.valueOf(nb));
 

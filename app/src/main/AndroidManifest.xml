@@ -37,7 +37,8 @@
         <activity
             android:name=".AffichageSoireeOrganisateur"
             android:label="@string/title_activity_affichage_soiree_organisateur"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ModifierSoiree"></activity>
     </application>
 
 </manifest>

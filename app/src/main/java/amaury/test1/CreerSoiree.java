@@ -83,10 +83,10 @@ public class CreerSoiree extends AppCompatActivity {
 
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        datepicker.setText(dayOfMonth + "/" + monthOfYear+"/"+year);
                         jour=dayOfMonth;
-                        mois=monthOfYear;
+                        mois=monthOfYear+1;
                         annee=year;
+                        datepicker.setText(jour+"/"+mois+"/"+annee);
                     }
                 }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                 pickerDialog.show();
