@@ -18,7 +18,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
             android:weightSum="1"
-            android:background="#3de8e8e8">
+            android:background="#74cdcdcd">
 
             <LinearLayout
                 android:orientation="vertical"

@@ -110,7 +110,7 @@ public class AffichageSoireeFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(view.getContext(), ModifierSoiree.class);
-                    i.putExtra("id",String.valueOf(soiree.getId()));
+                    i.putExtra("id", String.valueOf(soiree.getId()));
                     startActivity(i);
                 }
             });
@@ -153,6 +153,49 @@ public class AffichageSoireeFragment extends Fragment {
                 }
             });
             l.addView(b);
+            bdd = new MySQLiteHelper(view.getContext());
+            boolean estAvant = bdd.estEnAvant(soiree.getId());
+            bdd.close();
+            if(!estAvant) {
+                b = new Button(view.getContext());
+                b.setText("Mettre en Avant");
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(view.getContext());
+                        helpBuilder.setTitle("Mettre en Avant");
+                        helpBuilder.setMessage("En mettant en avant votre évènement, celui-ci apparaitra en priorité dans les recherches des utilisateurs. Pour accéder à cette fonctionnalité, vous devez payer 5€");
+
+                        LayoutInflater inflater = getLayoutInflater(Bundle.EMPTY);
+                        final View checkboxLayout = inflater.inflate(R.layout.popup_vide, null);
+                        helpBuilder.setView(checkboxLayout);
+
+                        helpBuilder.setPositiveButton("Payer",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        MySQLiteHelper bdd = new MySQLiteHelper(view.getContext());
+                                        bdd.enAvantSoiree(soiree.getId());
+                                        bdd.close();
+                                        Toast.makeText(getActivity(), "Soirée mise en avant", Toast.LENGTH_SHORT).show();
+                                        Intent i = new Intent(view.getContext(), Accueil.class);
+                                        startActivity(i);
+                                    }
+                                });
+
+                        helpBuilder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //Ne fait rien
+                            }
+                        });
+
+                        // Remember, create doesn't show the dialog
+                        AlertDialog helpDialog = helpBuilder.create();
+                        helpDialog.show();
+                    }
+                });
+                l.addView(b);
+            }
 
         }
 
