@@ -282,6 +282,39 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         else return 1;
     }
 
+    //Met en avant un évènement
+    public void enAvantSoiree(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String query = "UPDATE "+TABLE_SOIREES+" SET enavant=1 WHERE id="+id+";";
+
+        db.execSQL(query);
+
+        db.close();
+    }
+
+    //Retourne vrai si l'évènement est déjà en avant
+    public boolean estEnAvant(int id){
+
+        boolean bool;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String query = "SELECT enavant FROM "+TABLE_SOIREES+" WHERE id="+id+";";
+
+        Cursor cursor = db.rawQuery(query,null);
+
+
+        cursor.moveToFirst();
+        int estenavant = cursor.getInt(0);
+
+        if(estenavant==1)
+            bool = true;
+        else
+            bool = false;
+        db.close();
+        return bool;
+    }
+
     //Retourne les soirées en fonction des filtres
     public List<Soiree> getAllSoireesFiltres(int prix, int jourdeb, int moisdeb, int anneedeb, int heure, int minute, int classement){
         List<Soiree> soirees = new LinkedList<>();
@@ -300,15 +333,15 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         if(requeteFiltres.equals(" WHERE"))
             requeteFiltres="";
 
-        String classage = " ORDER BY ";
+        String classage = " ORDER BY enavant DESC";
         switch (classement){
-            case 0:classage+="annee, mois, jour, heures, minutes";break;
-            case 1:classage+="annee DESC, mois DESC, jour DESC, heures DESC, minutes DESC";break;
+            case 0:classage+=",annee, mois, jour, heures, minutes";break;
+            case 1:classage+=",annee DESC, mois DESC, jour DESC, heures DESC, minutes DESC";break;
             case 2:classage="";break;
-            case 3:classage+="prix, annee, mois, jour, heures, minutes";break;
-            case 4:classage+="prix DESC, annee, mois, jour, heures, minutes";break;
-            case 5:classage+="titre, annee, mois, jour, heures, minutes";break;
-            case 6:classage+="titre DESC, annee, mois, jour, heures, minutes";break;
+            case 3:classage+=",prix, annee, mois, jour, heures, minutes";break;
+            case 4:classage+=",prix DESC, annee, mois, jour, heures, minutes";break;
+            case 5:classage+=",titre, annee, mois, jour, heures, minutes";break;
+            case 6:classage+=",titre DESC, annee, mois, jour, heures, minutes";break;
             default:classage="";break;
         }
 
@@ -759,7 +792,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "heures INTEGER NOT NULL,"+
                 "minutes INTEGER NOT NULL,"+
                 "coordonnees TEXT NOT NULL,"+
-                "organisateur INTEGER NOT NULL);";
+                "organisateur INTEGER NOT NULL," +
+                "enavant INTEGER NOT NULL);";
 
         //SQL statement to create user's created events
         String CREATE_MYCREATEEVENT_TABLE = "CREATE TABLE "+TABLE_MYCREATEDEVENT+" ("+
@@ -797,27 +831,27 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         //Insérer des valeurs dans la BDD
         //Utilisateurs
-        String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','user1','user1');";
+        String createUser = "INSERT INTO utilisateurs VALUES (NULL,'user1','user1','user1','Menelas','Bob-Antoine');";
         db.execSQL(createUser);
-        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user2','user2','user2','user2','user2');";
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user2','user2','user2','Lemieux','Francois');";
         db.execSQL(createUser);
-        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user3','user3','user3','user3','user3');";
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user3','user3','user3','Montagne','Gilbert');";
         db.execSQL(createUser);
-        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user4','user4','user4','user4','user4');";
+        createUser = "INSERT INTO utilisateurs VALUES (NULL,'user4','user4','user4','Trump','Donald');";
         db.execSQL(createUser);
 
         //Soirees
-        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','On va regarder Deadpool !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',1);";
+        String createSoiree = "INSERT INTO soirees VALUES (NULL, 'Soirée films avec Francis','On va regarder Deadpool !', 15, '€', 20, 04, 2016, 22, 30, 'Chez Francis',1,0);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Y aura du gateau !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',1);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Anniversaire','Y aura du gateau !', 0, '€', 22, 04, 2016, 21, 00, 'Boulangerie Tartine',1,0);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','On a 12 bars à faire !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',2);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Tournée des bars','On a 12 bars à faire !', 42, '€', 21, 04, 2016, 19, 30, 'Dernier Pub',2,0);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',2);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Allez viens','Allez viens on est bien bien bien !', 0, '€', 20, 04, 2016, 20, 45, 'Botte de foin',2,0);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','On est bien bien bien bien bien !', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',3);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'On est bien','On est bien bien bien bien bien !', 28, '$', 12, 25, 2016, 18, 30, 'Dans le prè',3,0);";
         db.execSQL(createSoiree);
-        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Regarde tout ce que lon peut faire','Y aura de la tarte au concombre', 15, '€', 12, 04, 2016, 22, 30, 'Chez Francis',3);";
+        createSoiree = "INSERT INTO soirees VALUES (NULL, 'Je ne vois pas très bien','Il va faire tout noir', 0, '€', 25, 04, 2016, 19, 15, 'Je ne sais pas',3,0);";
         db.execSQL(createSoiree);
 
         //Notation
@@ -828,6 +862,18 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         createNotation = "INSERT INTO usernotation VALUES (3,3,4);";
         db.execSQL(createNotation);
         createNotation = "INSERT INTO usernotation VALUES (4,3,3.5);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (2,1,2);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (3,1,4);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (4,1,1);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (2,2,1);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (3,2,1);";
+        db.execSQL(createNotation);
+        createNotation = "INSERT INTO usernotation VALUES (4,2,5);";
         db.execSQL(createNotation);
 
         //Créer les trigger de MAJ des tables

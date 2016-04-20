@@ -84,7 +84,7 @@ public class Accueil extends AppCompatActivity {
         if (id == R.id.action_credits) {
             AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
             helpBuilder.setTitle("Crédits");
-            helpBuilder.setMessage("Développé par Amaury PUNEL, Aurélien TERRAIN, Arnaud DUC NGUYEN, Le Fragile");
+            helpBuilder.setMessage("Développé par Amaury PUNEL, Aurélien TERRAIN, Arnaud DUC NGUYEN, Corentin BOUCHAUDON");
 
             LayoutInflater inflater = getLayoutInflater();
             final View checkboxLayout = inflater.inflate(R.layout.popup_vide, null);

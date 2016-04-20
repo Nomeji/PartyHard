@@ -146,4 +146,5 @@ public class LoginTest extends AppCompatActivity {
 
         return valid;
     }
+
 }
