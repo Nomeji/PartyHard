@@ -91,13 +91,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Refresh"
-                android:id="@+id/button28" />
+                android:id="@+id/button28"
+                android:background="#ff6331"
+                android:textColor="#ffffff" />
         </LinearLayout>
 
         <ListView
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:id="@+id/listView5" />
+            android:id="@+id/listView5"
+            android:background="#32c2370d" />
 
     </LinearLayout>
 

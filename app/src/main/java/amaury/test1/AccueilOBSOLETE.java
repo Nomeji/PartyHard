@@ -39,7 +39,7 @@ public class AccueilOBSOLETE extends AppCompatActivity {
 
     public void onClickRecherche(View view){
         Intent da = new Intent();
-        da.setClass(this, RechercherSoiree.class);
+        da.setClass(this, LoginTest.class);
         startActivity(da);
     }
 

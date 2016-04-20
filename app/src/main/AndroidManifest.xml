@@ -22,13 +22,7 @@
             android:label="@string/title_activity_vue_options" />
         <activity android:name=".CreerSoiree" />
         <activity android:name=".RechercherSoiree" />
-        <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".LoginActivity"/>
         <activity android:name=".AffichageSoiree" />
         <activity android:name=".AffichageUtilisateur" />
         <activity
@@ -38,7 +32,15 @@
             android:name=".AffichageSoireeOrganisateur"
             android:label="@string/title_activity_affichage_soiree_organisateur"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ModifierSoiree"></activity>
+        <activity android:name=".ModifierSoiree" />
+        <activity android:name=".LoginTest" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            </activity>
+        <activity android:name=".SignupActivity"></activity>
     </application>
 
 </manifest>

@@ -105,7 +105,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="65dp"
                 android:text="Créer une soirée"
-                android:id="@+id/button11" />
+                android:id="@+id/button11"
+                android:background="#ff6331"
+                android:textColor="#ffffff"
+                android:textSize="25dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView

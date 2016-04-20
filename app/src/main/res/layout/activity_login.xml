@@ -125,7 +125,9 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="onClickSeConnecter"/>
+        android:onClick="onClickSeConnecter"
+        android:background="#ff6331"
+        android:textColor="#ffffff"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -135,6 +137,8 @@
         android:layout_alignTop="@+id/connecterCompteBouton"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="onClickCreerCompte"/>
+        android:onClick="onClickCreerCompte"
+        android:background="#ff6331"
+        android:textColor="#ffffff"/>
 
 </RelativeLayout>

@@ -111,10 +111,8 @@
                 android:layout_height="wrap_content"
                 android:text="Suivre l&apos;organisateur"
                 android:id="@+id/button24"
-                android:layout_below="@+id/textView25"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="top|center_horizontal" />
+                android:background="#ff6331"
+                android:textColor="#ffffff" />
         </LinearLayout>
 
         <TextView
