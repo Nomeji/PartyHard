@@ -78,13 +78,13 @@
 
             <Spinner
                 android:layout_width="120dp"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:entries="@array/currency_arrays"
                 android:prompt="@string/currency_prompt"
                 android:id="@+id/champCurrency" />
         </LinearLayout>
 
-        <LinearLayout
+    <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -102,7 +102,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Choisir Date"
-                android:id="@+id/buttonChoisirDate" />
+                android:id="@+id/buttonChoisirDate"
+                android:background="#ff6331"
+                android:textColor="#ffffff" />
 
         </LinearLayout>
 
@@ -123,7 +125,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Choisir Heure"
-                android:id="@+id/buttonChoisirHeure" />
+                android:id="@+id/buttonChoisirHeure"
+                android:background="#ff6331"
+                android:textColor="#ffffff" />
 
         </LinearLayout>
 
@@ -157,5 +161,7 @@
             android:id="@+id/button8"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.05"
-            android:onClick="onClickajouterSoiree"/>
+            android:onClick="onClickajouterSoiree"
+            android:background="#ff6331"
+            android:textColor="#ffffff"/>
 </LinearLayout>

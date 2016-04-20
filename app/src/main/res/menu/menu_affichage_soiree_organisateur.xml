@@ -4,11 +4,6 @@
     tools:context="amaury.test1.AffichageSoireeOrganisateur">
 
     <item
-        android:id="@+id/action_choix_langue"
-        android:orderInCategory="100"
-        android:title="@string/action_choix_langue"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_credits"
         android:orderInCategory="100"
         android:title="@string/action_credits"

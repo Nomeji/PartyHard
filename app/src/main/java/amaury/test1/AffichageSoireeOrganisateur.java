@@ -1,5 +1,8 @@
 package amaury.test1;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -86,8 +89,28 @@ public class AffichageSoireeOrganisateur extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_choix_langue) {
-            return true;
+        if (id == R.id.action_credits) {
+            AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
+            helpBuilder.setTitle("Crédits");
+            helpBuilder.setMessage("Développé par Amaury PUNEL, Aurélien TERRAIN, Arnaud DUC NGUYEN, Le Fragile");
+
+            LayoutInflater inflater = getLayoutInflater();
+            final View checkboxLayout = inflater.inflate(R.layout.popup_vide, null);
+            helpBuilder.setView(checkboxLayout);
+
+            helpBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            // Remember, create doesn't show the dialog
+            AlertDialog helpDialog = helpBuilder.create();
+            helpDialog.show();
+        }
+        if(id == R.id.action_deconnexion){
+            Intent i = new Intent(this,LoginTest.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);

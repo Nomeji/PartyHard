@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RadioButton;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TimePicker;
@@ -40,13 +41,16 @@ public class RechercheFragment extends Fragment {
 
     private ListView maListViewPerso;
     private View view;
+    Button timepicker, datepicker;
+    Calendar c;
     //Variables des filtres
-    private int prix=-1;
-    private int heure=-1, minute=-1;
-    private int jourdeb=-1, moisdeb=-1, anneedeb=-1;
-    private int jourfin=-1, moisfin=-1, anneefin=-1;
-    private int classement=0; //La position dans la liste d'items des classements, commence à 0
-
+    static public int prix=-1;
+    static public int heure=-1, minute=-1;
+    static public int heureT=-1, minuteT=-1;
+    static public int jour=-1, mois=-1, annee=-1;
+    static public int jourT=-1, moisT=-1, anneeT=-1;
+    static public int classement=0; //La position dans la liste d'items des classements, commence à 0
+    static public boolean gratuitSet=false,nimporteSet=true,heureSet=false;
     public RechercheFragment() {
         // Required empty public constructor
     }
@@ -92,7 +96,6 @@ public class RechercheFragment extends Fragment {
             }
         });
 
-
         // Inflate the layout for this fragment
         return view;
 
@@ -106,20 +109,110 @@ public class RechercheFragment extends Fragment {
         final View checkboxLayout = inflater.inflate(R.layout.popup_filtre_layout, null);
         helpBuilder.setView(checkboxLayout);
 
-        helpBuilder.setPositiveButton("Ok",
-        new DialogInterface.OnClickListener() {
+        //Ajout des listener pour datepicker et timepicker
+        c = Calendar.getInstance();
+        timepicker=(Button)checkboxLayout.findViewById(R.id.button5);
+        timepicker.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(DialogInterface dialog, int which) {
-                CheckBox cb = (CheckBox) checkboxLayout.findViewById(R.id.checkboxTest1);
-                boolean gratuit = cb.isChecked();
-                if(gratuit)
-                    prix =0;
-                else
-                    prix = -1;
-                majFiltresRecherche();
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog pickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+
+                    @Override
+                    public void onTimeSet(TimePicker view, int selectedHour,
+                                          int selectedMinute) {
+                        timepicker.setText(selectedHour + "h" + selectedMinute);
+                        heureT = selectedHour;
+                        minuteT = selectedMinute;
+                    }
+                }, 0, 0, true);
+                pickerDialog.show();
+            }
+        });
+        datepicker=(Button)checkboxLayout.findViewById(R.id.button9);
+        datepicker.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog pickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        jourT = dayOfMonth;
+                        moisT = monthOfYear + 1;
+                        anneeT = year;
+                        datepicker.setText(jourT + "/" + moisT + "/" + anneeT);
+                    }
+                }, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+                pickerDialog.show();
             }
         });
 
+
+        if(gratuitSet){
+            CheckBox cb = (CheckBox) checkboxLayout.findViewById(R.id.checkboxTest1);
+            cb.setChecked(true);
+        }
+        if(nimporteSet){
+            RadioButton rb = (RadioButton) checkboxLayout.findViewById(R.id.radioButton);
+            rb.setChecked(true);
+        }
+        else{
+            RadioButton rb = (RadioButton) checkboxLayout.findViewById(R.id.radioButton2);
+            rb.setChecked(true);
+        }
+
+
+
+
+        helpBuilder.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        RadioButton rb = (RadioButton) checkboxLayout.findViewById(R.id.radioButton);
+                        if (rb.isChecked()) {
+                            jour = -1;
+                            mois = -1;
+                            annee = -1;
+                            nimporteSet=true;
+                        } else {
+                            jour = jourT;
+                            mois = moisT;
+                            annee = anneeT;
+                            nimporteSet=false;
+                        }
+
+
+                        heure=heureT;
+                        minute=minuteT;
+
+                        CheckBox cb = (CheckBox) checkboxLayout.findViewById(R.id.checkboxTest1);
+                        boolean gratuit = cb.isChecked();
+                        if (gratuit){
+                            prix = 0;
+                            gratuitSet=true;
+                        }
+                        else{
+                            prix = -1;
+                            gratuitSet=false;
+                        }
+                        majFiltresRecherche();
+                    }
+                });
+
+        helpBuilder.setNegativeButton("Reset", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                gratuitSet=false;nimporteSet=true;heureSet=false;
+                jour=-1; mois=-1; annee=-1;
+                heureT=minuteT=-1;
+                jourT=moisT=anneeT=-1;
+                heure=minute=-1;
+                prix=-1;
+                majFiltresRecherche();
+            }
+        });
         // Remember, create doesn't show the dialog
         AlertDialog helpDialog = helpBuilder.create();
         helpDialog.show();
@@ -170,7 +263,7 @@ public class RechercheFragment extends Fragment {
                 //On affichage la soiree dans une nouvelle activité
                 Intent da = new Intent();
                 da.setClass(v.getContext(), AffichageSoireeOrganisateur.class);
-                da.putExtra("id",String.valueOf(map.get("id")));
+                da.putExtra("id", String.valueOf(map.get("id")));
                 startActivity(da);
             }
         });
@@ -178,10 +271,14 @@ public class RechercheFragment extends Fragment {
 
     public void majFiltresRecherche(){
         MySQLiteHelper bdd = new MySQLiteHelper(view.getContext());
-        List<Soiree> liste = bdd.getAllSoireesFiltres(prix,jourdeb,moisdeb,anneedeb,jourfin,moisfin,anneefin,heure,minute,classement);
+        List<Soiree> liste = bdd.getAllSoireesFiltres(prix,jour,mois,annee,heure,minute,classement);
         bdd.close();
         remplirListView(liste);
         Toast.makeText(getActivity(), "Liste mise à jour", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickDateRecherche(View view){
+
     }
 
 }

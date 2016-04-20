@@ -67,6 +67,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String TABLE_MYFOLLEWEVENT = "myfollowevent";
     private static final String TABLE_MYFOLLOWUSER = "myfollowuser";
     private static final String TABLE_USERNOTATION = "usernotation";
+    private static final String TABLE_SOIREETYPE = "soireetype";
 
 
 
@@ -282,7 +283,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     }
 
     //Retourne les soirées en fonction des filtres
-    public List<Soiree> getAllSoireesFiltres(int prix, int jourdeb, int moisdeb, int anneedeb, int jourfin, int moisfin, int anneefin, int heure, int minute, int classement){
+    public List<Soiree> getAllSoireesFiltres(int prix, int jourdeb, int moisdeb, int anneedeb, int heure, int minute, int classement){
         List<Soiree> soirees = new LinkedList<>();
 
 
@@ -293,11 +294,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         else
             requeteFiltres+=" prix>=0";
         if(jourdeb!=-1)
-            requeteFiltres+=" AND jour>="+jourdeb+" AND mois>="+moisdeb+" AND annee>="+anneedeb;
-        if(jourfin!=-1)
-            requeteFiltres+=" AND jour<="+jourfin+" AND mois<="+moisfin+" AND annee<="+anneefin;
+            requeteFiltres+=" AND jour="+jourdeb+" AND mois="+moisdeb+" AND annee="+anneedeb;
         if(heure!=-1)
-            requeteFiltres+=" AND heures>="+heure+" AND minutes>="+minute;
+            requeteFiltres+=" AND heures>="+heure;//+"AND minutes>="+minute;
         if(requeteFiltres.equals(" WHERE"))
             requeteFiltres="";
 
@@ -670,7 +669,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 2. build query
         String query = "SELECT COUNT(*) FROM "+TABLE_MYFOLLOWUSER+" WHERE idusersuivi="+id+";";
-        Cursor cursor = db.rawQuery(query,null);
+        Cursor cursor = db.rawQuery(query, null);
 
         // 3. if we got results get the first one
         cursor.moveToFirst();
@@ -778,6 +777,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         String CREATE_USERNOTATION_TABLE = "CREATE TABLE "+TABLE_USERNOTATION+" ("+
                 "idusernoteur INTEGER NOT NULL, idusernote INTEGER NOT NULL, note FLOAT NOT NULL);";
 
+        //SQL statement to create soiree's type
+        String CREATE_SOIREETYPE_TABLE = "CREATE TABLE "+TABLE_SOIREETYPE+" ("+
+                "idsoiree INTEGER NOT NULL, party INTEGER NOT NULL, sortie INTEGER NOT NULL, concert INTEGER NOT NULL);";
+
 
 
         //create soirees table
@@ -789,6 +792,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_MYFOLLOWEVENT_TABLE);
         db.execSQL(CREATE_MYFOLLOWUSER_TABLE);
         db.execSQL(CREATE_USERNOTATION_TABLE);
+        db.execSQL(CREATE_SOIREETYPE_TABLE);
 
 
         //Insérer des valeurs dans la BDD

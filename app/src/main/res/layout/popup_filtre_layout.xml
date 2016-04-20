@@ -18,66 +18,38 @@
 
         <RadioGroup
             android:id="@+id/radioChoixDate"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp">
 
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aujourd&apos;hui"
+            android:text="N&apos;importe quand"
             android:id="@+id/radioButton"
             android:checked="true" />
 
-        <RadioButton
+            <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Entre"
+            android:text="Le"
             android:id="@+id/radioButton2"
             android:checked="false" />
 
-        </RadioGroup>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="40dp">
-
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
                 <Button
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Choisir Date début"
+                    android:text="Choisir Date"
                     android:id="@+id/button9" />
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="0dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="et"
-                    android:id="@+id/textView37" />
-
-                <Button
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Choisir Date fin"
-                    android:id="@+id/button10" />
-            </LinearLayout>
-        </LinearLayout>
+        </RadioGroup>
 
     </LinearLayout>
 
