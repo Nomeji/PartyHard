@@ -3,8 +3,6 @@ Android event sharing
 
 ---
 
-**Corentin BOUCHAUDON, Arnaud DUC NGUYEN, Amaury PUNEL, Aurélien TERRAIN**
-
 ## Présentation de l’application
 L’application permet la recherche, création et partage événements entre utilisateurs.
 
